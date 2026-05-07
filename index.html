@@ -1,49 +1,2004 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlowKit — Wird umgebaut</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            text-align: center;
-        }
-        .container { padding: 40px; max-width: 500px; }
-        .logo {
-            width: 64px; height: 64px;
-            background: #2563eb;
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: 700; font-size: 28px;
-            margin: 0 auto 32px;
-        }
-        h1 { font-size: 32px; font-weight: 800; margin-bottom: 16px; color: white; }
-        p { font-size: 18px; color: #94a3b8; line-height: 1.6; margin-bottom: 32px; }
-        .badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 20px;
-            font-size: 14px;
-            color: #64748b;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FlowKit – Workflow Automation für Solopreneure und KMU. Prozesse, die sich selbst erledigen.">
+  <title>FlowKit – Workflow Automation DACH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════
+       CSS VARIABLES
+       ═══════════════════════════════════════════════ */
+    :root {
+      --bg-void: #0a0a0a;
+      --bg-elevated: #171717;
+      --bg-surface: #fafafa;
+      --bg-pure: #ffffff;
+      --border-subtle: #262626;
+      --border-light: #e5e5e5;
+      --border-medium: #404040;
+      --text-primary: #ffffff;
+      --text-inverse: #0a0a0a;
+      --text-secondary: #a3a3a3;
+      --text-muted: #737373;
+      --text-faint: #525252;
+      --accent: #e5e5e5;
+      --success: #10b981;
+      --error: #ef4444;
+      --cta-bg: #ffffff;
+      --cta-text: #0a0a0a;
+      --brand-accent: #2563EB;
+      --brand-accent-hover: #1D4ED8;
+      --brand-accent-glow: rgba(37,99,235,0.35);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: 0.25s ease;
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--bg-void);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ═══════════════════════════════════════════════
+       SCROLL PROGRESS BAR
+       ═══════════════════════════════════════════════ */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--brand-accent), #60a5fa);
+      z-index: 10001; width: 0%;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 10px var(--brand-accent-glow);
+    }
+
+    /* ═══════════════════════════════════════════════
+       TYPOGRAPHY
+       ═══════════════════════════════════════════════ */
+    .eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 500;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    h1, h2, h3 { font-family: 'Newsreader', serif; font-weight: 700; }
+    h1 { font-size: clamp(36px, 5vw, 64px); line-height: 1.1; }
+    h2 { font-size: clamp(32px, 4vw, 48px); line-height: 1.15; }
+    h3 { font-family: 'Inter', sans-serif; font-weight: 600; font-size: clamp(18px, 2vw, 20px); line-height: 1.3; }
+    .lead { font-size: clamp(18px, 2vw, 20px); line-height: 1.5; color: var(--text-secondary); }
+
+    /* Gradient text effect */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--brand-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ═══════════════════════════════════════════════
+       LAYOUT
+       ═══════════════════════════════════════════════ */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    @media (max-width: 768px) { .container { padding: 0 24px; } }
+
+    .section { padding: 96px 0; }
+    @media (max-width: 768px) { .section { padding: 64px 0; } }
+
+    .section-dark { background: var(--bg-void); color: var(--text-primary); }
+    .section-light { background: var(--bg-surface); color: var(--text-inverse); }
+
+    /* ═══════════════════════════════════════════════
+       BUTTONS
+       ═══════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px;
+      padding: 14px 28px; border-radius: var(--radius-sm);
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+    .btn:hover { transform: scale(1.02); }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: var(--cta-bg); color: var(--cta-text);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .btn-primary:hover { box-shadow: 0 4px 12px rgba(255,255,255,0.15); }
+    .btn-ghost {
+      background: transparent; color: var(--text-primary);
+      border: 1px solid var(--border-medium);
+    }
+    .btn-ghost:hover { border-color: var(--text-secondary); background: rgba(255,255,255,0.04); }
+    .btn-accent {
+      background: var(--brand-accent); color: #fff;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+    }
+    .btn-accent:hover { background: var(--brand-accent-hover); box-shadow: 0 6px 20px rgba(37,99,235,0.5); }
+
+    /* ═══════════════════════════════════════════════
+       TOOLTIP
+       ═══════════════════════════════════════════════ */
+    [data-tooltip] { position: relative; }
+    [data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      padding: 6px 12px; border-radius: 6px;
+      background: var(--bg-elevated); color: var(--text-primary);
+      font-size: 12px; white-space: nowrap;
+      border: 1px solid var(--border-subtle);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 100;
+    }
+    [data-tooltip]:hover::after {
+      opacity: 1; transform: translateX(-50%) scale(1);
+    }
+
+    /* ═══════════════════════════════════════════════
+       SKIP LINK
+       ═══════════════════════════════════════════════ */
+    .skip-link {
+      position: absolute; top: -40px; left: 0;
+      background: var(--cta-bg); color: var(--cta-text);
+      padding: 8px 16px; z-index: 10000;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ═══════════════════════════════════════════════
+       SCROLL REVEAL with stagger
+       ═══════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+    /* ═══════════════════════════════════════════════
+       NAVBAR
+       ═══════════════════════════════════════════════ */
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .navbar .container {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .navbar__logo {
+      font-family: 'Newsreader', serif; font-weight: 700; font-size: 24px;
+      color: var(--text-primary);
+    }
+    .navbar__links {
+      display: flex; align-items: center; gap: 32px;
+    }
+    .navbar__links a {
+      font-size: 14px; font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--transition);
+      position: relative;
+    }
+    .navbar__links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--brand-accent);
+      transition: width 0.3s ease;
+    }
+    .navbar__links a:hover { color: var(--text-primary); }
+    .navbar__links a:hover::after { width: 100%; }
+    .navbar__cta .btn { padding: 10px 20px; font-size: 14px; }
+
+    .navbar__toggle {
+      display: none; flex-direction: column; gap: 5px;
+      width: 28px; padding: 4px;
+    }
+    .navbar__toggle span {
+      display: block; height: 2px; width: 100%;
+      background: var(--text-primary);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .navbar__toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .navbar__toggle.active span:nth-child(2) { opacity: 0; }
+    .navbar__toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile Menu Sheet */
+    .mobile-menu {
+      position: fixed; top: 0; right: 0; width: min(320px, 80vw); height: 100vh;
+      background: var(--bg-elevated); z-index: 9999;
+      transform: translateX(100%); transition: transform 0.3s ease;
+      padding: 80px 32px 32px; border-left: 1px solid var(--border-subtle);
+    }
+    .mobile-menu.active { transform: translateX(0); }
+    .mobile-menu__overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s;
+    }
+    .mobile-menu__overlay.active { opacity: 1; visibility: visible; }
+    .mobile-menu a {
+      display: block; padding: 16px 0; font-size: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .mobile-menu .btn { margin-top: 24px; width: 100%; }
+
+    @media (max-width: 768px) {
+      .navbar__links, .navbar__cta { display: none; }
+      .navbar__toggle { display: flex; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════ */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 120px 0 140px;
+    }
+    .hero__grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .hero__content { max-width: 560px; }
+    .hero .eyebrow { margin-bottom: 20px; display: block; }
+    .hero h1 { margin-bottom: 24px; }
+    .hero .lead { margin-bottom: 36px; }
+    .hero__cta { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    /* Typing cursor */
+    .typing-cursor {
+      display: inline-block; width: 3px; height: 1em;
+      background: var(--brand-accent);
+      margin-left: 4px; vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Hero Canvas */
+    .hero__canvas {
+      position: absolute; inset: 0;
+      pointer-events: none; z-index: 0;
+      opacity: 0.5;
+    }
+    .hero__grid { position: relative; z-index: 1; }
+
+    /* CSS Node Graph Visual */
+    .hero__visual {
+      position: relative; width: 100%; aspect-ratio: 1;
+      max-width: 480px; margin: 0 auto;
+    }
+    .node-graph {
+      position: absolute; inset: 0;
+    }
+    .node {
+      position: absolute; width: 48px; height: 48px;
+      border-radius: 50%; background: var(--bg-elevated);
+      border: 2px solid var(--border-medium);
+      display: flex; align-items: center; justify-content: center;
+      animation: nodePulse 3s ease-in-out infinite;
+      cursor: pointer;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .node:hover {
+      border-color: var(--brand-accent);
+      transform: scale(1.15) !important;
+    }
+    .node::after {
+      content: ''; width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+    .node:nth-child(1) { top: 15%; left: 20%; animation-delay: 0s; }
+    .node:nth-child(2) { top: 25%; right: 25%; animation-delay: 0.5s; }
+    .node:nth-child(3) { top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 1s; }
+    .node:nth-child(4) { bottom: 25%; left: 25%; animation-delay: 1.5s; }
+    .node:nth-child(5) { bottom: 15%; right: 20%; animation-delay: 2s; }
+    .node:nth-child(6) { top: 40%; left: 10%; animation-delay: 0.3s; }
+    .node:nth-child(7) { bottom: 35%; right: 10%; animation-delay: 1.2s; }
+
+    .connection {
+      position: absolute; height: 2px;
+      background: linear-gradient(90deg, var(--border-subtle), var(--text-secondary), var(--border-subtle));
+      background-size: 200% 100%;
+      animation: connectionFlow 3s linear infinite;
+      opacity: 0.4;
+    }
+    .connection::after {
+      content: ''; position: absolute; right: 0; top: -3px;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--text-secondary);
+      animation: dotTravel 3s linear infinite;
+    }
+    .connection:nth-child(8)  { width: 120px; top: 25%; left: 25%; transform: rotate(25deg); animation-delay: 0s; }
+    .connection:nth-child(9)  { width: 100px; top: 35%; left: 40%; transform: rotate(60deg); animation-delay: 0.5s; }
+    .connection:nth-child(10) { width: 140px; top: 55%; left: 30%; transform: rotate(-20deg); animation-delay: 1s; }
+    .connection:nth-child(11) { width: 110px; top: 45%; left: 55%; transform: rotate(40deg); animation-delay: 1.5s; }
+    .connection:nth-child(12) { width: 130px; bottom: 30%; left: 20%; transform: rotate(-35deg); animation-delay: 2s; }
+    .connection:nth-child(13) { width: 90px; bottom: 40%; right: 25%; transform: rotate(15deg); animation-delay: 0.3s; }
+
+    @keyframes nodePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.15); }
+      50% { box-shadow: 0 0 0 12px rgba(255,255,255,0); }
+    }
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.6; }
+    }
+    @keyframes connectionFlow {
+      0% { background-position: 0% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes dotTravel {
+      0% { right: 100%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { right: 0; opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+      .hero__grid { grid-template-columns: 1fr; text-align: center; }
+      .hero__content { max-width: 100%; }
+      .hero__visual { max-width: 320px; margin-top: 48px; }
+      .hero { padding: 80px 0 100px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .node, .connection, .node::after { animation: none; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       STATS COUNTER SECTION
+       ═══════════════════════════════════════════════ */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+      padding: 48px 0; border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .stat-item { text-align: center; }
+    .stat-number {
+      font-family: 'Newsreader', serif; font-weight: 700;
+      font-size: clamp(36px, 4vw, 56px);
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .stat-number .suffix { color: var(--brand-accent); }
+    .stat-label {
+      font-size: 13px; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-top: 8px;
+    }
+    @media (max-width: 768px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       CARDS
+       ═══════════════════════════════════════════════ */
+    .card-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;
+    }
+    @media (max-width: 768px) { .card-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      padding: 32px; border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+      background: var(--bg-pure);
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, var(--brand-accent), #60a5fa);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .card:hover::before { transform: scaleX(1); }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-medium);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    }
+    .section-dark .card {
+      background: var(--bg-elevated); border-color: var(--border-subtle); color: var(--text-primary);
+    }
+    .section-dark .card:hover { border-color: var(--border-medium); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .card__icon {
+      width: 48px; height: 48px; border-radius: var(--radius-sm);
+      background: rgba(37,99,235,0.1); color: var(--brand-accent);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .card:hover .card__icon {
+      transform: scale(1.1) rotate(-5deg);
+      background: rgba(37,99,235,0.2);
+    }
+    .card h3 { margin-bottom: 12px; }
+    .card p { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
+
+    /* ═══════════════════════════════════════════════
+       STEPS
+       ═══════════════════════════════════════════════ */
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px;
+    }
+    @media (max-width: 768px) { .steps { grid-template-columns: 1fr; } }
+    .step {
+      text-align: center; position: relative;
+    }
+    .step__num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--bg-void); color: var(--text-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 20px;
+      margin: 0 auto 20px; border: 2px solid var(--border-subtle);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .step:hover .step__num {
+      border-color: var(--brand-accent);
+      box-shadow: 0 0 20px rgba(37,99,235,0.3);
+      transform: scale(1.1);
+    }
+    .step h3 { margin-bottom: 12px; }
+    .step p { color: var(--text-muted); font-size: 15px; }
+
+    /* Step connector lines (desktop) */
+    @media (min-width: 769px) {
+      .step:not(:last-child)::after {
+        content: ''; position: absolute; top: 28px; right: -16px;
+        width: 32px; height: 2px; background: var(--border-light);
+      }
+      .section-dark .step:not(:last-child)::after {
+        background: var(--border-subtle);
+      }
+    }
+
+    /* ═══════════════════════════════════════════════
+       FEATURE TABS
+       ═══════════════════════════════════════════════ */
+    .feature-tabs { margin-top: 48px; }
+    .tab-nav {
+      display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .tab-btn {
+      padding: 12px 24px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .tab-btn:hover { color: var(--text-primary); border-color: var(--border-medium); }
+    .tab-btn.active {
+      color: var(--text-primary);
+      background: var(--brand-accent);
+      border-color: var(--brand-accent);
+      box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+    }
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════════════
+       TESTIMONIAL SLIDER
+       ═══════════════════════════════════════════════ */
+    .testimonial-slider {
+      position: relative; max-width: 800px; margin: 48px auto 0;
+      overflow: hidden;
+    }
+    .testimonial-track {
+      display: flex; transition: transform 0.5s ease;
+    }
+    .testimonial-slide {
+      min-width: 100%; padding: 0 16px;
+    }
+    .testimonial-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+    }
+    .testimonial-text {
+      font-family: 'Newsreader', serif; font-style: italic;
+      font-size: clamp(18px, 2.5vw, 24px);
+      line-height: 1.5; color: var(--text-primary);
+      margin-bottom: 24px;
+    }
+    .testimonial-author {
+      font-weight: 600; font-size: 15px; color: var(--text-primary);
+    }
+    .testimonial-role {
+      font-size: 13px; color: var(--text-muted); margin-top: 4px;
+    }
+    .testimonial-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand-accent), #60a5fa);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; font-weight: 700; font-size: 20px;
+      color: #fff;
+    }
+    .slider-controls {
+      display: flex; justify-content: center; gap: 12px; margin-top: 24px;
+    }
+    .slider-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--border-medium); cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .slider-dot.active { background: var(--brand-accent); transform: scale(1.3); }
+    .slider-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+      color: var(--text-primary); display: flex;
+      align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.3s;
+      z-index: 2;
+    }
+    .slider-arrow:hover { background: var(--brand-accent); border-color: var(--brand-accent); }
+    .slider-arrow.prev { left: 0; }
+    .slider-arrow.next { right: 0; }
+
+    /* ═══════════════════════════════════════════════
+       PRICING
+       ═══════════════════════════════════════════════ */
+    .pricing-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;
+    }
+    @media (max-width: 768px) { .pricing-cards { grid-template-columns: 1fr; max-width: 400px; margin: 48px auto 0; } }
+
+    .pricing-card {
+      padding: 40px 32px; border-radius: var(--radius);
+      border: 1px solid var(--border-subtle); background: var(--bg-elevated);
+      display: flex; flex-direction: column;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      position: relative;
+    }
+    .pricing-card:hover { transform: translateY(-4px); border-color: var(--border-medium); }
+    .pricing-card.popular {
+      border-color: var(--brand-accent); position: relative;
+      box-shadow: 0 8px 32px rgba(37,99,235,0.15);
+    }
+    .pricing-card.popular::before {
+      content: 'Beliebt'; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      background: var(--brand-accent); color: #fff; font-size: 12px; font-weight: 600;
+      padding: 4px 16px; border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      font-family: 'Inter', sans-serif;
+    }
+    .pricing-card h3 { font-size: 22px; margin-bottom: 8px; }
+    .pricing-card .price {
+      font-family: 'Newsreader', serif; font-weight: 700; font-size: 40px;
+      margin-bottom: 24px; color: var(--text-primary);
+    }
+    .pricing-card .price span { font-size: 16px; font-weight: 400; color: var(--text-muted); }
+    .pricing-card .price .original {
+      text-decoration: line-through; color: var(--text-faint);
+      margin-right: 8px; font-size: 24px;
+    }
+    .pricing-card ul { flex: 1; margin-bottom: 32px; }
+    .pricing-card ul li {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; font-size: 14px; color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .pricing-card ul li:last-child { border-bottom: none; }
+    .pricing-card .btn { width: 100%; }
+
+    /* Pricing Toggle */
+    .pricing-toggle {
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      margin-bottom: 8px;
+    }
+    .pricing-toggle-label {
+      font-size: 14px; font-weight: 500; color: var(--text-muted);
+      cursor: pointer; transition: color 0.3s;
+    }
+    .pricing-toggle-label.active { color: var(--text-primary); }
+    .toggle-switch {
+      position: relative; width: 52px; height: 28px;
+      background: var(--border-subtle); border-radius: 14px;
+      cursor: pointer; transition: background 0.3s;
+    }
+    .toggle-switch.active { background: var(--brand-accent); }
+    .toggle-switch::after {
+      content: ''; position: absolute; top: 3px; left: 3px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--text-primary);
+      transition: transform 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .toggle-switch.active::after { transform: translateX(24px); }
+    .save-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      background: rgba(16,185,129,0.15); color: var(--success);
+      font-size: 11px; font-weight: 600; margin-left: 8px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       FAQ
+       ═══════════════════════════════════════════════ */
+    .faq-list { max-width: 720px; margin: 48px auto 0; }
+    .faq-item {
+      border-bottom: 1px solid var(--border-light);
+      transition: background 0.3s;
+    }
+    .faq-item:hover { background: rgba(255,255,255,0.02); }
+    .faq-item button {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 0; font-size: 16px; font-weight: 600;
+      color: var(--text-inverse); text-align: left;
+      background: none; border: none; cursor: pointer;
+    }
+    .faq-item button:focus { outline: 2px solid var(--text-secondary); outline-offset: 4px; }
+    .faq-item .icon {
+      width: 24px; height: 24px; flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .faq-item.active .icon { transform: rotate(45deg); }
+    .faq-item .answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+    }
+    .faq-item.active .answer {
+      max-height: 300px; padding-bottom: 24px;
+    }
+    .faq-item .answer p {
+      color: var(--text-muted); font-size: 15px; line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════════
+       CONTACT FORM
+       ═══════════════════════════════════════════════ */
+    .contact-section { text-align: center; }
+    .contact-form-wrapper {
+      max-width: 600px; margin: 48px auto 0;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 48px;
+    }
+    @media (max-width: 768px) { .contact-form-wrapper { padding: 32px 24px; } }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-group label {
+      display: block; font-size: 14px; font-weight: 500;
+      color: var(--text-secondary); margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; padding: 14px 16px;
+      background: var(--bg-void); color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm); font-size: 15px;
+      font-family: inherit; transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none; border-color: var(--brand-accent);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--text-faint); }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    .form-error {
+      color: var(--error); font-size: 13px; margin-top: 4px; display: none;
+    }
+    .form-group.has-error input,
+    .form-group.has-error textarea,
+    .form-group.has-error select {
+      border-color: var(--error);
+    }
+    .form-group.has-error .form-error { display: block; }
+    .form-success {
+      padding: 24px; border-radius: var(--radius-sm);
+      background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3);
+      color: var(--success); text-align: center; display: none;
+    }
+    .form-success.visible { display: block; }
+    .form-success svg { margin: 0 auto 12px; }
+
+    /* ═══════════════════════════════════════════════
+       CTA SECTION
+       ═══════════════════════════════════════════════ */
+    .cta-section { text-align: center; }
+    .cta-section h2 { margin-bottom: 20px; }
+    .cta-section .lead { margin-bottom: 32px; }
+    .cta-section .subtext {
+      font-size: 14px; color: var(--text-muted); margin-top: 16px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       BACK TO TOP
+       ═══════════════════════════════════════════════ */
+    .back-to-top {
+      position: fixed; bottom: 32px; right: 32px;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--bg-elevated); color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 999;
+      opacity: 0; transform: translateY(20px); pointer-events: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .back-to-top.visible {
+      opacity: 1; transform: translateY(0); pointer-events: all;
+    }
+    .back-to-top:hover {
+      background: var(--brand-accent); border-color: var(--brand-accent);
+      transform: translateY(-4px);
+    }
+
+    /* ═══════════════════════════════════════════════
+       COOKIE BANNER
+       ═══════════════════════════════════════════════ */
+    .cookie-banner {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--bg-elevated); border-top: 1px solid var(--border-subtle);
+      padding: 20px 32px; z-index: 10000;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+      transform: translateY(100%); transition: transform 0.4s ease;
+    }
+    .cookie-banner.visible { transform: translateY(0); }
+    .cookie-banner p {
+      font-size: 14px; color: var(--text-secondary); flex: 1; min-width: 200px;
+    }
+    .cookie-banner a { color: var(--brand-accent); text-decoration: underline; }
+    .cookie-banner .btn { padding: 10px 20px; font-size: 14px; }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════ */
+    .footer {
+      padding: 64px 0 32px; border-top: 1px solid var(--border-subtle);
+    }
+    .footer__grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    }
+    @media (max-width: 768px) {
+      .footer__grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .footer__grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+    .footer__brand {
+      font-family: 'Newsreader', serif; font-weight: 700; font-size: 24px;
+      margin-bottom: 12px; display: inline-block;
+    }
+    .footer__claim {
+      font-size: 14px; color: var(--text-muted); max-width: 260px;
+    }
+    .footer__col h4 {
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--text-secondary); margin-bottom: 20px;
+    }
+    .footer__col a {
+      display: block; font-size: 14px; color: var(--text-muted);
+      padding: 6px 0; transition: color var(--transition);
+    }
+    .footer__col a:hover { color: var(--text-primary); }
+    .footer__bottom {
+      margin-top: 48px; padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; color: var(--text-faint);
+    }
+    @media (max-width: 500px) {
+      .footer__bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+    .footer__social {
+      display: flex; gap: 16px;
+    }
+    .footer__social a {
+      width: 36px; height: 36px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .footer__social a:hover {
+      border-color: var(--border-medium); background: rgba(255,255,255,0.04);
+    }
+
+    /* ═══════════════════════════════════════════════
+       FOCUS STYLES
+       ═══════════════════════════════════════════════ */
+    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+      outline: 2px solid var(--brand-accent);
+      outline-offset: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       NOTIFICATION TOAST
+       ═══════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed; top: 80px; right: 24px;
+      z-index: 10002; display: flex; flex-direction: column; gap: 8px;
+    }
+    .toast {
+      padding: 16px 24px; border-radius: var(--radius-sm);
+      background: var(--bg-elevated); color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      font-size: 14px; max-width: 360px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      transform: translateX(120%); opacity: 0;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .toast.visible { transform: translateX(0); opacity: 1; }
+    .toast.success { border-left: 3px solid var(--success); }
+    .toast.error { border-left: 3px solid var(--error); }
+    .toast.info { border-left: 3px solid var(--brand-accent); }
+  </style>
 </head>
 <body>
+
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <a href="#main" class="skip-link">Zum Hauptinhalt springen</a>
+
+  <!-- ═══════════════════════════════════════════════ NAVBAR -->
+  <header class="navbar" role="banner">
     <div class="container">
-        <div class="logo">FK</div>
-        <h1>Wird umgebaut</h1>
-        <p>FlowKit bekommt ein Upgrade.<br>Bald wieder mit neuer Power.</p>
-        <span class="badge">Coming Soon</span>
+      <a href="#" class="navbar__logo" aria-label="FlowKit Startseite">FlowKit</a>
+      <nav class="navbar__links" role="navigation" aria-label="Hauptnavigation">
+        <a href="#recipes">Lösung</a>
+        <a href="#pricing">Preise</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Kontakt</a>
+      </nav>
+      <div class="navbar__cta">
+        <a href="#contact" class="btn btn-primary">Gespräch vereinbaren</a>
+      </div>
+      <button class="navbar__toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </header>
+
+  <div class="mobile-menu__overlay" id="mobile-overlay"></div>
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobiles Menü">
+    <a href="#recipes">Lösung</a>
+    <a href="#pricing">Preise</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Kontakt</a>
+    <a href="#contact" class="btn btn-primary">Gespräch vereinbaren</a>
+  </div>
+
+  <main id="main">
+
+    <!-- ═══════════════════════════════════════════════ HERO -->
+    <section class="section section-dark hero">
+      <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+      <div class="container">
+        <div class="hero__grid">
+          <div class="hero__content reveal">
+            <span class="eyebrow">Workflow Automation DACH</span>
+            <h1>
+              <span id="typingText"></span><span class="typing-cursor" id="typingCursor"></span>
+            </h1>
+            <p class="lead">Für Solopreneure und KMU. Ohne IT-Abteilung. Ohne endloses Budget.</p>
+            <div class="hero__cta">
+              <a href="#contact" class="btn btn-primary">Kostenloses Erstgespräch</a>
+              <a href="#how-it-works" class="btn btn-ghost">So funktioniert's</a>
+            </div>
+          </div>
+          <div class="hero__visual reveal reveal-delay-2" aria-hidden="true">
+            <div class="node-graph">
+              <div class="node" data-tooltip="Trigger"></div>
+              <div class="node" data-tooltip="Filter"></div>
+              <div class="node" data-tooltip="API"></div>
+              <div class="node" data-tooltip="Transform"></div>
+              <div class="node" data-tooltip="Output"></div>
+              <div class="node" data-tooltip="Webhook"></div>
+              <div class="node" data-tooltip="Schedule"></div>
+              <div class="connection"></div>
+              <div class="connection"></div>
+              <div class="connection"></div>
+              <div class="connection"></div>
+              <div class="connection"></div>
+              <div class="connection"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ STATS BAR -->
+    <section class="section-dark" style="padding:0;">
+      <div class="container">
+        <div class="stats-bar reveal">
+          <div class="stat-item">
+            <div class="stat-number" data-target="400" data-suffix="+">0<span class="suffix">+</span></div>
+            <div class="stat-label">Integrationen</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="12" data-suffix="h">0<span class="suffix">h</span></div>
+            <div class="stat-label">Zeitersparnis / Woche</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="99" data-suffix="%">0<span class="suffix">%</span></div>
+            <div class="stat-label">Erfolgsquote</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="2" data-suffix=" Wochen">0<span class="suffix"> Wochen</span></div>
+            <div class="stat-label">Implementierung</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ PROBLEM -->
+    <section class="section section-light" id="problem">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Das Problem</span>
+          <h2>Manuelle Prozesse bremsen aus.</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card reveal">
+            <div class="card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+            </div>
+            <h3>Rechnungen schreiben = Zeitfalle</h3>
+            <p>Jede Rechnung manuell erstellen, Mahnungen verschicken, Zahlungen prüfen. Stunden, die niemand zurückbekommt.</p>
+          </article>
+          <article class="card reveal reveal-delay-1">
+            <div class="card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <h3>Onboarding = Chaos</h3>
+            <p>Neuer Kunde, neue Checkliste, neue E-Mails. Jedes Mal von vorne. Wichtige Schritte werden vergessen — Kunden verloren.</p>
+          </article>
+          <article class="card reveal reveal-delay-2">
+            <div class="card__icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><polyline points="8 14 12 18 16 14"></polyline></svg>
+            </div>
+            <h3>Content = immer wieder von vorne</h3>
+            <p>Täglich neuer Post, neuer Newsletter, neue Idee. Der Content-Kalender existiert nur im Kopf — und bricht regelmäßig zusammen.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ SOLUTION -->
+    <section class="section section-dark" id="recipes">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Die Lösung</span>
+          <h2>Workflows, die arbeiten — während du schläfst.</h2>
+        </div>
+
+        <!-- Feature Tabs -->
+        <div class="tab-nav reveal">
+          <button class="tab-btn active" data-tab="tab-invoicing">Rechnung & Mahnwesen</button>
+          <button class="tab-btn" data-tab="tab-onboarding">Kunden-Onboarding</button>
+          <button class="tab-btn" data-tab="tab-content">Content-Kalender</button>
+        </div>
+
+        <div class="feature-tabs">
+          <div class="tab-panel active" id="tab-invoicing">
+            <div class="card-grid">
+              <article class="card reveal">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </div>
+                <h3>Automatische Rechnungserstellung</h3>
+                <p>Rechnungen werden automatisch generiert, formatiert und per E-Mail verschickt — direkt nach Projektabschluss oder zum Monatsende.</p>
+              </article>
+              <article class="card reveal reveal-delay-1">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <h3>Intelligentes Mahnwesen</h3>
+                <p>Automatische Zahlungserinnerungen nach 7, 14 und 30 Tagen. Mahnstufen mit Eskalation — ohne dass du einen Finger rührst.</p>
+              </article>
+              <article class="card reveal reveal-delay-2">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                </div>
+                <h3>Buchhaltungs-Export</h3>
+                <p>Alle Rechnungen und Zahlungen automatisch an dein Buchhaltungstool exportiert. DATEV, Lexware, SevDesk — nahtlos integriert.</p>
+              </article>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-onboarding">
+            <div class="card-grid">
+              <article class="card">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+                </div>
+                <h3>Willkommens-Sequenz</h3>
+                <p>Automatische E-Mail-Serie für neue Kunden. Tag 1: Willkommen. Tag 3: Onboarding-Guide. Tag 7: Erster Check-in.</p>
+              </article>
+              <article class="card">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+                <h3>Zugangs-Management</h3>
+                <p>Automatische Erstellung von Accounts, Zugängen und Berechtigungen. Kunde bekommt alles, was er braucht — sofort.</p>
+              </article>
+              <article class="card">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+                <h3>Checklisten-Tracking</h3>
+                <p>Jeder Onboarding-Schritt wird verfolgt. Nichts wird vergessen. Automatische Erinnerungen bei überfälligen Schritten.</p>
+              </article>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-content">
+            <div class="card-grid">
+              <article class="card">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </div>
+                <h3>Content-Planung</h3>
+                <p>Automatische Erstellung von Content-Kalendern basierend auf deiner Strategie. Themen, Formate, Deadlines — alles strukturiert.</p>
+              </article>
+              <article class="card">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </div>
+                <h3>Multi-Channel Publishing</h3>
+                <p>Ein Content-Stück, automatisch angepasst für LinkedIn, Instagram, Newsletter und Blog. Posting-Zeiten optimiert für Engagement.</p>
+              </article>
+              <article class="card">
+                <div class="card__icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </div>
+                <h3>Performance-Tracking</h3>
+                <p>Automatische Analyse deiner Content-Performance. Reports, die zeigen, was funktioniert — wöchentlich in dein Postfach.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ HOW IT WORKS -->
+    <section class="section section-light" id="how-it-works">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Der Prozess</span>
+          <h2>So funktioniert es.</h2>
+        </div>
+        <div class="steps">
+          <div class="step reveal">
+            <div class="step__num">1</div>
+            <h3>Gespräch</h3>
+            <p>Wir analysieren deine Prozesse. Wo verlierst du Zeit? Was lässt sich automatisieren?</p>
+          </div>
+          <div class="step reveal reveal-delay-1">
+            <div class="step__num">2</div>
+            <h3>Workflow</h3>
+            <p>Wir bauen deinen maßgeschneiderten n8n-Workflow. Exakt für deine Tools, dein Team, dein Tempo.</p>
+          </div>
+          <div class="step reveal reveal-delay-2">
+            <div class="step__num">3</div>
+            <h3>Automatisierung</h3>
+            <p>Deine Prozesse laufen — ohne dich. Du konzentrierst dich auf das, was wirklich zählt.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ TESTIMONIALS -->
+    <section class="section section-dark" id="testimonials">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Kundenstimmen</span>
+          <h2>Das sagen unsere Kunden.</h2>
+        </div>
+        <div class="testimonial-slider reveal">
+          <button class="slider-arrow prev" id="sliderPrev" aria-label="Vorheriges Zitat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button class="slider-arrow next" id="sliderNext" aria-label="Nächstes Zitat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+          <div class="testimonial-track" id="testimonialTrack">
+            <div class="testimonial-slide">
+              <div class="testimonial-card">
+                <div class="testimonial-avatar">MK</div>
+                <p class="testimonial-text">„Seit FlowKit unsere Rechnungen automatisiert, sparen wir 8 Stunden pro Woche. Die Mahnungen laufen von alleine — und unsere Zahlungseingänge sind pünktlicher als je zuvor."</p>
+                <div class="testimonial-author">Maria Klein</div>
+                <div class="testimonial-role">Geschäftsführerin, KleinDesign GmbH</div>
+              </div>
+            </div>
+            <div class="testimonial-slide">
+              <div class="testimonial-card">
+                <div class="testimonial-avatar">TW</div>
+                <p class="testimonial-text">„Das Onboarding neuer Kunden war ein Albtraum. Heute schicke ich den Vertrag — und alles Weitere passiert automatisch. Meine Kunden sind beeindruckt von der Professionalität."</p>
+                <div class="testimonial-author">Thomas Weber</div>
+                <div class="testimonial-role">Solopreneur, WeberConsulting</div>
+              </div>
+            </div>
+            <div class="testimonial-slide">
+              <div class="testimonial-card">
+                <div class="testimonial-avatar">SL</div>
+                <p class="testimonial-text">„Unser Content-Kalender war Chaos. Jetzt haben wir drei Wochen Vorlauf, alles ist geplant und der Workflow postet automatisch. Ich kann mich endlich auf die Strategie konzentrieren."</p>
+                <div class="testimonial-author">Sarah Lindner</div>
+                <div class="testimonial-role">Marketing Lead, TechStart AG</div>
+              </div>
+            </div>
+          </div>
+          <div class="slider-controls" id="sliderDots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ PRICING -->
+    <section class="section section-light" id="pricing">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Preise</span>
+          <h2>Preise, die sich rechnen.</h2>
+        </div>
+
+        <!-- Pricing Toggle -->
+        <div class="pricing-toggle reveal">
+          <span class="pricing-toggle-label active" id="labelMonthly">Einmalig</span>
+          <div class="toggle-switch" id="pricingToggle" role="switch" aria-checked="false" tabindex="0"></div>
+          <span class="pricing-toggle-label" id="labelYearly">Enterprise <span class="save-badge">auf Anfrage</span></span>
+        </div>
+
+        <div class="pricing-cards">
+          <article class="pricing-card reveal">
+            <h3>Starter</h3>
+            <div class="price" id="priceStarter">
+              <span class="euro">€0</span><span> einmalig</span>
+            </div>
+            <p style="color:var(--text-muted);margin-bottom:24px;font-size:14px;">Für den Einstieg</p>
+            <ul>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                1 Workflow
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Basis-Support
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Community-Zugang
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                E-Mail-Support
+              </li>
+            </ul>
+            <button class="btn btn-ghost" onclick="showToast('Starter-Plan ausgewählt! Wir leiten dich zum Formular weiter.', 'info')">Kostenlos starten</button>
+          </article>
+
+          <article class="pricing-card popular reveal reveal-delay-1">
+            <h3>Professional</h3>
+            <div class="price" id="pricePro">
+              <span class="euro">€49</span><span> einmalig</span>
+            </div>
+            <p style="color:var(--text-muted);margin-bottom:24px;font-size:14px;">Beliebt bei wachsenden Teams</p>
+            <ul>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                3 Workflows
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Priorität-Support
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Custom Nodes
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                API-Zugang
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Monatlicher Report
+              </li>
+            </ul>
+            <button class="btn btn-accent" onclick="selectPlan('Professional')">Professional wählen</button>
+          </article>
+
+          <article class="pricing-card reveal reveal-delay-2">
+            <h3>Enterprise</h3>
+            <div class="price" id="priceEnt">Auf Anfrage</div>
+            <p style="color:var(--text-muted);margin-bottom:24px;font-size:14px;">Für skalierende Unternehmen</p>
+            <ul>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Unlimitierte Workflows
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Dedicated Support
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                SLA & Onboarding
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Custom Integrationen
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Persönlicher Account Manager
+              </li>
+            </ul>
+            <button class="btn btn-ghost" onclick="selectPlan('Enterprise')">Kontakt aufnehmen</button>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ FAQ -->
+    <section class="section section-dark" id="faq">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">FAQ</span>
+          <h2>Fragen? Antworten.</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item reveal">
+            <button aria-expanded="false" aria-controls="faq-1">
+              Was ist Workflow Automation?
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <div id="faq-1" class="answer">
+              <p>Die automatische Ausführung von Geschäftsprozessen durch Software. Statt repetitive Aufgaben manuell zu erledigen, übernimmt ein Workflow-Engine die Arbeit — rund um die Uhr, fehlerfrei, skalierbar.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button aria-expanded="false" aria-controls="faq-2">
+              Für wen ist FlowKit?
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <div id="faq-2" class="answer">
+              <p>Solopreneure und KMU ohne große IT-Abteilung. Wenn du täglich repetitive Aufgaben hast und keine sechsstellige Budget für Enterprise-Software — dann ist FlowKit für dich gebaut.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button aria-expanded="false" aria-controls="faq-3">
+              Wie lange dauert die Implementierung?
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <div id="faq-3" class="answer">
+              <p>1–2 Wochen für Standard-Workflows. Komplexe Integrationen mit mehreren Systemen können 3–4 Wochen dauern. Wir geben vor Projektstart einen konkreten Zeitplan.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button aria-expanded="false" aria-controls="faq-4">
+              Welche Systeme können angebunden werden?
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <div id="faq-4" class="answer">
+              <p>CRM, E-Mail, Kalender, Shopsysteme, Kommunikationstools — über 400 Integrationen via n8n. Fehlt eine Anbindung, bauen wir sie als Custom Node.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button aria-expanded="false" aria-controls="faq-5">
+              Was kostet Workflow Automation?
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+            <div id="faq-5" class="answer">
+              <p>Starter ist kostenlos — ein Workflow, Basis-Support, Community. Professional kostet €49 einmalig mit drei Workflows und Priorität-Support. Enterprise auf Anfrage.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ CONTACT FORM -->
+    <section class="section section-light contact-section" id="contact">
+      <div class="container">
+        <div class="reveal">
+          <span class="eyebrow">Kontakt</span>
+          <h2>Bereit für weniger Arbeit?</h2>
+          <p class="lead">Lass uns in 20 Minuten besprechen, welche Prozesse bei dir automatisiert werden können.</p>
+        </div>
+        <div class="contact-form-wrapper reveal reveal-delay-1">
+          <!-- Success Message -->
+          <div class="form-success" id="formSuccess">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            <h3 style="margin-bottom:8px;font-family:'Newsreader',serif;">Anfrage gesendet!</h3>
+            <p>Wir melden uns innerhalb von 24 Stunden bei dir.</p>
+          </div>
+
+          <!-- Form -->
+          <form id="contactForm" novalidate>
+            <div class="form-row">
+              <div class="form-group" id="groupFirstName">
+                <label for="firstName">Vorname *</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Max" required>
+                <span class="form-error">Bitte gib deinen Vornamen ein.</span>
+              </div>
+              <div class="form-group" id="groupLastName">
+                <label for="lastName">Nachname *</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Mustermann" required>
+                <span class="form-error">Bitte gib deinen Nachnamen ein.</span>
+              </div>
+            </div>
+            <div class="form-group" id="groupEmail">
+              <label for="email">E-Mail *</label>
+              <input type="email" id="email" name="email" placeholder="max@beispiel.de" required>
+              <span class="form-error">Bitte gib eine gültige E-Mail-Adresse ein.</span>
+            </div>
+            <div class="form-group" id="groupCompany">
+              <label for="company">Unternehmen</label>
+              <input type="text" id="company" name="company" placeholder="Dein Unternehmen (optional)">
+            </div>
+            <div class="form-row">
+              <div class="form-group" id="groupPlan">
+                <label for="plan">Gewünschter Plan</label>
+                <select id="plan" name="plan">
+                  <option value="">Plan auswählen...</option>
+                  <option value="starter">Starter (kostenlos)</option>
+                  <option value="professional">Professional (€49 einmalig)</option>
+                  <option value="enterprise">Enterprise (auf Anfrage)</option>
+                </select>
+              </div>
+              <div class="form-group" id="groupPhone">
+                <label for="phone">Telefon</label>
+                <input type="tel" id="phone" name="phone" placeholder="+49 123 456789">
+              </div>
+            </div>
+            <div class="form-group" id="groupMessage">
+              <label for="message">Nachricht</label>
+              <textarea id="message" name="message" placeholder="Erzähl uns kurz von deinen Prozessen, die du automatisieren möchtest..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-accent" id="submitBtn" style="width:100%;">
+              <span id="submitText">Gespräch vereinbaren</span>
+              <svg id="submitSpinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;animation:spin 1s linear infinite;">
+                <circle cx="12" cy="12" r="10" stroke-dasharray="60" stroke-dashoffset="20" stroke-linecap="round"></circle>
+              </svg>
+            </button>
+            <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:text-bottom;margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Deine Daten sind sicher. Kein Spam, versprochen.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════ CTA / NEWSLETTER -->
+    <section class="section section-dark cta-section">
+      <div class="container">
+        <div class="reveal">
+          <h2>Immer up to date?</h2>
+          <p class="lead">Einmal im Monat: Tipps, neue Workflows und Automation-Hacks.</p>
+          <form id="newsletterForm" style="max-width:480px;margin:32px auto 0;display:flex;gap:12px;flex-wrap:wrap;">
+            <input type="email" placeholder="deine@email.de" required
+              style="flex:1;min-width:200px;padding:14px 16px;background:var(--bg-elevated);color:var(--text-primary);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);font-size:15px;font-family:inherit;"
+              onfocus="this.style.borderColor='var(--brand-accent)';this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.15)';"
+              onblur="this.style.borderColor='var(--border-subtle)';this.style.boxShadow='none';">
+            <button type="submit" class="btn btn-primary">Anmelden</button>
+          </form>
+          <p class="subtext">Kostenlos. Jederzeit abmeldbar.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════ FOOTER -->
+  <footer class="footer section-dark" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <a href="#" class="footer__brand">FlowKit</a>
+          <p class="footer__claim">Workflow Automation für Solopreneure und KMU — ohne IT-Abteilung, ohne endloses Budget.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Produkt</h4>
+          <a href="#recipes">Lösung</a>
+          <a href="#pricing">Preise</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">Kontakt</a>
+        </div>
+        <div class="footer__col">
+          <h4>Rechtliches</h4>
+          <a href="#">Impressum</a>
+          <a href="#">Datenschutz</a>
+          <a href="#">AGB</a>
+        </div>
+        <div class="footer__col">
+          <h4>Social</h4>
+          <div class="footer__social">
+            <a href="#" aria-label="LinkedIn" data-tooltip="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="#" aria-label="X / Twitter" data-tooltip="X / Twitter">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" aria-label="GitHub" data-tooltip="GitHub">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>&copy; 2026 FlowKit — Eine KI Holding Tochterfirma.</span>
+        <span>Made with precision in DACH.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Zurück nach oben" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <!-- Cookie Banner -->
+  <div class="cookie-banner" id="cookieBanner">
+    <p>Wir nutzen Cookies nur für grundlegende Funktionen. <a href="#">Mehr erfahren</a></p>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-ghost" onclick="dismissCookies()" style="padding:10px 16px;font-size:13px;">Ablehnen</button>
+      <button class="btn btn-primary" onclick="acceptCookies()" style="padding:10px 16px;font-size:13px;">OK</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT
+       ═══════════════════════════════════════════════ -->
+  <script>
+    // ═══════════════════════════════════════════════
+    // SCROLL PROGRESS BAR
+    // ═══════════════════════════════════════════════
+    const scrollProgress = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = (scrollTop / scrollHeight) * 100;
+      scrollProgress.style.width = progress + '%';
+    }, { passive: true });
+
+    // ═══════════════════════════════════════════════
+    // INTERSECTION OBSERVER (Reveal on Scroll)
+    // ═══════════════════════════════════════════════
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ═══════════════════════════════════════════════
+    // TYPING ANIMATION
+    // ═══════════════════════════════════════════════
+    const typingText = document.getElementById('typingText');
+    const typingCursor = document.getElementById('typingCursor');
+    const phrases = [
+      'Prozesse, die sich selbst erledigen.',
+      'Workflows, die 24/7 arbeiten.',
+      'Zeit zurückgewinnen. Automatisch.'
+    ];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 60;
+
+    function typeEffect() {
+      const currentPhrase = phrases[phraseIndex];
+      if (isDeleting) {
+        typingText.textContent = currentPhrase.substring(0, charIndex - 1);
+        charIndex--;
+        typingSpeed = 30;
+      } else {
+        typingText.textContent = currentPhrase.substring(0, charIndex + 1);
+        charIndex++;
+        typingSpeed = 60;
+      }
+
+      if (!isDeleting && charIndex === currentPhrase.length) {
+        typingSpeed = 2500;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        typingSpeed = 500;
+      }
+
+      setTimeout(typeEffect, typingSpeed);
+    }
+    // Start typing after initial delay
+    setTimeout(typeEffect, 800);
+
+    // ═══════════════════════════════════════════════
+    // PARTICLE CANVAS (Hero Background)
+    // ═══════════════════════════════════════════════
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const PARTICLE_COUNT = 40;
+
+    function resizeCanvas() {
+      const hero = canvas.parentElement;
+      canvas.width = hero.offsetWidth;
+      canvas.height = hero.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.4;
+        this.vy = (Math.random() - 0.5) * 0.4;
+        this.radius = Math.random() * 2 + 1;
+        this.opacity = Math.random() * 0.3 + 0.1;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(37, 99, 235, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push(new Particle());
+    }
+
+    let mouseX = 0, mouseY = 0;
+    canvas.parentElement.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    });
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      // Draw connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(37, 99, 235, ${0.08 * (1 - dist / 150)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+        // Connect to mouse
+        const dx = particles[i].x - mouseX;
+        const dy = particles[i].y - mouseY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(mouseX, mouseY);
+          ctx.strokeStyle = `rgba(37, 99, 235, ${0.12 * (1 - dist / 120)})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // ═══════════════════════════════════════════════
+    // COUNTER ANIMATION
+    // ═══════════════════════════════════════════════
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const duration = 2000;
+          const start = performance.now();
+
+          function updateCounter(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out quart
+            const eased = 1 - Math.pow(1 - progress, 4);
+            const current = Math.round(eased * target);
+            el.innerHTML = current + '<span class="suffix">' + suffix + '</span>';
+            if (progress < 1) requestAnimationFrame(updateCounter);
+          }
+          requestAnimationFrame(updateCounter);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-number').forEach(el => counterObserver.observe(el));
+
+    // ═══════════════════════════════════════════════
+    // MOBILE MENU
+    // ═══════════════════════════════════════════════
+    const toggle = document.querySelector('.navbar__toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-overlay');
+
+    function openMenu() {
+      mobileMenu.classList.add('active');
+      overlay.classList.add('active');
+      toggle.classList.add('active');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      mobileMenu.classList.remove('active');
+      overlay.classList.remove('active');
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('active')) closeMenu();
+      else openMenu();
+    });
+    overlay.addEventListener('click', closeMenu);
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) closeMenu();
+    });
+
+    // ═══════════════════════════════════════════════
+    // FAQ ACCORDION
+    // ═══════════════════════════════════════════════
+    document.querySelectorAll('.faq-item button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isActive = item.classList.contains('active');
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('active');
+          i.querySelector('button').setAttribute('aria-expanded', 'false');
+        });
+        if (!isActive) {
+          item.classList.add('active');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // ═══════════════════════════════════════════════
+    // NAVBAR SCROLL SHADOW
+    // ═══════════════════════════════════════════════
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 10) {
+        navbar.style.boxShadow = '0 1px 3px rgba(0,0,0,0.3)';
+      } else {
+        navbar.style.boxShadow = 'none';
+      }
+    }, { passive: true });
+
+    // ═══════════════════════════════════════════════
+    // BACK TO TOP
+    // ═══════════════════════════════════════════════
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 600) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    }, { passive: true });
+
+    // ═══════════════════════════════════════════════
+    // FEATURE TABS
+    // ═══════════════════════════════════════════════
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // ═══════════════════════════════════════════════
+    // TESTIMONIAL SLIDER
+    // ═══════════════════════════════════════════════
+    const track = document.getElementById('testimonialTrack');
+    const slides = track.querySelectorAll('.testimonial-slide');
+    const dotsContainer = document.getElementById('sliderDots');
+    let currentSlide = 0;
+
+    // Create dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Zitat ${i + 1}`);
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    });
+
+    function goToSlide(index) {
+      currentSlide = index;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      dotsContainer.querySelectorAll('.slider-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === index);
+      });
+    }
+
+    document.getElementById('sliderPrev').addEventListener('click', () => {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      goToSlide(currentSlide);
+    });
+    document.getElementById('sliderNext').addEventListener('click', () => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      goToSlide(currentSlide);
+    });
+
+    // Auto-advance
+    setInterval(() => {
+      currentSlide = (currentSlide + 1) % slides.length;
+      goToSlide(currentSlide);
+    }, 6000);
+
+    // ═══════════════════════════════════════════════
+    // PRICING TOGGLE
+    // ═══════════════════════════════════════════════
+    const pricingToggle = document.getElementById('pricingToggle');
+    const labelMonthly = document.getElementById('labelMonthly');
+    const labelYearly = document.getElementById('labelYearly');
+    let isYearly = false;
+
+    function updatePricing() {
+      const starterPrice = document.querySelector('#priceStarter .euro');
+      const proPrice = document.querySelector('#pricePro .euro');
+      const entPrice = document.getElementById('priceEnt');
+
+      if (isYearly) {
+        starterPrice.textContent = '€0';
+        proPrice.textContent = '€39';
+        entPrice.textContent = 'Auf Anfrage';
+        pricingToggle.classList.add('active');
+        pricingToggle.setAttribute('aria-checked', 'true');
+        labelMonthly.classList.remove('active');
+        labelYearly.classList.add('active');
+      } else {
+        starterPrice.textContent = '€0';
+        proPrice.textContent = '€49';
+        entPrice.textContent = 'Auf Anfrage';
+        pricingToggle.classList.remove('active');
+        pricingToggle.setAttribute('aria-checked', 'false');
+        labelMonthly.classList.add('active');
+        labelYearly.classList.remove('active');
+      }
+    }
+
+    pricingToggle.addEventListener('click', () => {
+      isYearly = !isYearly;
+      updatePricing();
+    });
+    pricingToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        isYearly = !isYearly;
+        updatePricing();
+      }
+    });
+
+    // ═══════════════════════════════════════════════
+    // CONTACT FORM VALIDATION & SUBMISSION
+    // ═══════════════════════════════════════════════
+    const contactForm = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function showFieldError(groupId, show) {
+      const group = document.getElementById(groupId);
+      if (show) group.classList.add('has-error');
+      else group.classList.remove('has-error');
+    }
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let isValid = true;
+
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      showFieldError('groupFirstName', !firstName);
+      showFieldError('groupLastName', !lastName);
+      showFieldError('groupEmail', !email || !validateEmail(email));
+
+      if (!firstName || !lastName || !email || !validateEmail(email)) {
+        isValid = false;
+      }
+
+      if (!isValid) {
+        showToast('Bitte fülle alle Pflichtfelder korrekt aus.', 'error');
+        return;
+      }
+
+      // Simulate submission
+      submitBtn.disabled = true;
+      submitText.textContent = 'Wird gesendet...';
+      submitSpinner.style.display = 'inline-block';
+
+      setTimeout(() => {
+        contactForm.style.display = 'none';
+        formSuccess.classList.add('visible');
+        showToast('Anfrage erfolgreich gesendet!', 'success');
+      }, 1500);
+    });
+
+    // Clear errors on input
+    document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+      input.addEventListener('input', () => {
+        input.closest('.form-group').classList.remove('has-error');
+      });
+    });
+
+    // ═══════════════════════════════════════════════
+    // NEWSLETTER FORM
+    // ═══════════════════════════════════════════════
+    document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      showToast('Danke für deine Anmeldung! Prüfe dein Postfach.', 'success');
+      e.target.reset();
+    });
+
+    // ═══════════════════════════════════════════════
+    // TOAST NOTIFICATIONS
+    // ═══════════════════════════════════════════════
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+
+      const icons = {
+        success: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>',
+        error: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>',
+        info: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+      };
+
+      toast.innerHTML = `${icons[type]}<span>${message}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.add('visible');
+      });
+
+      setTimeout(() => {
+        toast.classList.remove('visible');
+        setTimeout(() => toast.remove(), 400);
+      }, 4000);
+    }
+
+    // ═══════════════════════════════════════════════
+    // SELECT PLAN (from pricing)
+    // ═══════════════════════════════════════════════
+    function selectPlan(planName) {
+      const planSelect = document.getElementById('plan');
+      if (planSelect) {
+        const options = { 'Starter': 'starter', 'Professional': 'professional', 'Enterprise': 'enterprise' };
+        planSelect.value = options[planName] || '';
+      }
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+      showToast(`${planName} ausgewählt. Fülle das Formular aus!`, 'info');
+    }
+
+    // ═══════════════════════════════════════════════
+    // COOKIE BANNER
+    // ═══════════════════════════════════════════════
+    const cookieBanner = document.getElementById('cookieBanner');
+
+    function acceptCookies() {
+      localStorage.setItem('cookiesAccepted', 'true');
+      cookieBanner.classList.remove('visible');
+    }
+
+    function dismissCookies() {
+      localStorage.setItem('cookiesDismissed', 'true');
+      cookieBanner.classList.remove('visible');
+    }
+
+    // Show cookie banner after 2 seconds if not yet decided
+    setTimeout(() => {
+      if (!localStorage.getItem('cookiesAccepted') && !localStorage.getItem('cookiesDismissed')) {
+        cookieBanner.classList.add('visible');
+      }
+    }, 2000);
+
+    // ═══════════════════════════════════════════════
+    // SMOOTH SCROLL FOR ANCHOR LINKS
+    // ═══════════════════════════════════════════════
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const target = document.querySelector(targetId);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ═══════════════════════════════════════════════
+    // SPIN KEYFRAME (for submit spinner)
+    // ═══════════════════════════════════════════════
+    const style = document.createElement('style');
+    style.textContent = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+    document.head.appendChild(style);
+  </script>
 </body>
 </html>
