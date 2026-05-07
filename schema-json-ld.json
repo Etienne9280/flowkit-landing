@@ -1,0 +1,170 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://flowkit.de/#business",
+      "name": "FlowKit",
+      "description": "Workflow Automation DACH — KI-gestützte Prozessautomatisierung für Unternehmen in Deutschland, Österreich und der Schweiz.",
+      "url": "https://flowkit.de",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://flowkit.de/logo.png"
+      },
+      "sameAs": [],
+      "areaServed": [
+        {
+          "@type": "Place",
+          "name": "Deutschland"
+        },
+        {
+          "@type": "Place",
+          "name": "Österreich"
+        },
+        {
+          "@type": "Place",
+          "name": "Schweiz"
+        }
+      ],
+      "knowsAbout": [
+        "Workflow Automation",
+        "KI-gestützte Prozessautomatisierung",
+        "No-Code Entwicklung",
+        "Systemintegration",
+        "Prozessoptimierung",
+        "n8n",
+        "Make",
+        "Zapier"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "hello@flowkit.de",
+        "availableLanguage": ["German"]
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://flowkit.de/#service",
+      "name": "Workflow Automation DACH",
+      "provider": {
+        "@id": "https://flowkit.de/#business"
+      },
+      "description": "Maßgeschneiderte KI-Workflows und Systemintegration für DACH-Unternehmen. Von der Analyse bis zum laufenden System — ohne große IT-Abteilung, ohne endloses Budget.",
+      "areaServed": [
+        {
+          "@type": "Place",
+          "name": "Deutschland"
+        },
+        {
+          "@type": "Place",
+          "name": "Österreich"
+        },
+        {
+          "@type": "Place",
+          "name": "Schweiz"
+        }
+      ],
+      "serviceType": [
+        "Workflow Automation",
+        "Systemintegration",
+        "No-Code Entwicklung",
+        "KI-Workflows",
+        "Prozessoptimierung"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "name": "Kostenloses Erstgespräch",
+        "description": "In einem kostenlosen 20-minütigen Gespräch zeigen wir dir, wo dein Unternehmen Automatisierungspotenzial hat — ohne Verpflichtung.",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://flowkit.de/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was ist Workflow Automation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Workflow Automation ist die automatische Ausführung von Geschäftsprozessen durch Software — ohne manuelles Eingreifen. Dabei werden Daten zwischen Systemen übertragen, E-Mails verarbeitet, Kundenanfragen kategorisiert und repetitive Aufgaben vollständig automatisiert. Durch KI-gestützte Workflows können auch komplexe Entscheidungen selbstständig getroffen werden."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Für wen ist FlowKit geeignet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "FlowKit ist spezialisiert auf kleine und mittlere Unternehmen (KMU) im DACH-Raum, die manuelle Prozesse automatisieren möchten, aber keine große IT-Abteilung haben. Ideal für E-Commerce, Dienstleister, Beratungsunternehmen und Agenturen, die mit wiederkehrenden Aufgaben wie E-Mail-Verarbeitung, Datenpflege oder Kundenkommunikation kämpfen."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie lange dauert die Implementierung?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Die meisten Workflows sind innerhalb von 1–2 Wochen einsatzbereit. Komplexe Integrationen mit mehreren Systemen können 3–4 Wochen in Anspruch nehmen. Wir arbeiten mit direktem Feedback-Loop, sodass du schon nach wenigen Tagen erste Ergebnisse siehst."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Welche Systeme können angebunden werden?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Wir verbinden nahezu alle gängigen Tools: CRM-Systeme (HubSpot, Pipedrive), E-Mail-Plattformen (Gmail, Outlook), Kalender (Google Calendar, Outlook), Shopsysteme (Shopify, WooCommerce), Kommunikationstools (Slack, Teams), Datenbanken (Airtable, Google Sheets), und viele weitere über API-Integrationen. Sollte ein Tool noch keine API haben, finden wir eine Alternative."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was kostet Workflow Automation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Jedes Projekt wird individuell kalkuliert. Die Kosten hängen von der Komplexität und der Anzahl der zu verbindenden Systeme ab. Der ROI liegt typischerweise bei 1–2 Monaten, da dein Team deutlich weniger Zeit mit manuellen Aufgaben verbringt. Wir bieten ein kostenloses Erstgespräch an, in dem wir dir eine transparente Kostenschätzung geben."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://flowkit.de/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Startseite",
+          "item": "https://flowkit.de/"
+        }
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://flowkit.de/#webpage",
+      "url": "https://flowkit.de",
+      "name": "FlowKit — Workflow Automation DACH",
+      "description": "KI-gestützte Prozessautomatisierung für Unternehmen in Deutschland, Österreich und der Schweiz.",
+      "inLanguage": "de",
+      "isPartOf": {
+        "@id": "https://flowkit.de/#website"
+      },
+      "about": {
+        "@id": "https://flowkit.de/#business"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://flowkit.de/og-image.png"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://flowkit.de/#website",
+      "url": "https://flowkit.de",
+      "name": "FlowKit",
+      "publisher": {
+        "@id": "https://flowkit.de/#business"
+      }
+    }
+  ]
+}

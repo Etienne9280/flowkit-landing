@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FlowKit — Workflow Automation für Solopreneure und kleine Teams im DACH-Raum. Erstelle, optimiere und skaliere deine Geschäftsprozesse ohne Code.">
+  <title>FlowKit — Workflow Automation DACH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── CSS Custom Properties ── */
+    :root {
+      --primary: #0A2540;
+      --accent: #2563EB;
+      --accent-hover: #1D4ED8;
+      --accent-light: #DBEAFE;
+      --light: #F6F9FC;
+      --white: #FFFFFF;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      --radius-sm: 6px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --max-width: 1200px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px; font-weight: 400; line-height: 1.6;
+      color: var(--text); background: var(--white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* ── Typography ── */
+    h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+    h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+    h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 600; line-height: 1.3; }
+    p { color: var(--text-muted); }
+
+    /* ── Utilities ── */
+    .container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 1.25rem; }
+    .section { padding: 5rem 0; }
+    @media (min-width: 768px) { .section { padding: 7rem 0; } }
+
+    .fade-in {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .fade-in.delay-1 { transition-delay: 0.1s; }
+    .fade-in.delay-2 { transition-delay: 0.2s; }
+    .fade-in.delay-3 { transition-delay: 0.3s; }
+    .fade-in.delay-4 { transition-delay: 0.4s; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.875rem 1.75rem; font-size: 0.9375rem; font-weight: 600;
+      border-radius: var(--radius); transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent); color: var(--white);
+      box-shadow: 0 4px 14px rgb(37 99 235 / 0.35);
+    }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgb(37 99 235 / 0.45); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-secondary {
+      background: var(--white); color: var(--primary);
+      border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn-ghost { background: transparent; color: var(--white); border: 1.5px solid rgb(255 255 255 / 0.25); }
+    .btn-ghost:hover { background: rgb(255 255 255 / 0.1); border-color: rgb(255 255 255 / 0.4); }
+
+    /* ── Header ── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgb(255 255 255 / 0.85); backdrop-filter: blur(16px) saturate(1.5);
+      -webkit-backdrop-filter: blur(16px) saturate(1.5);
+      border-bottom: 1px solid var(--border); transition: box-shadow var(--transition);
+    }
+    .header.scrolled { box-shadow: var(--shadow); }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 4rem; max-width: var(--max-width); margin: 0 auto; padding: 0 1.25rem;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.625rem;
+      font-size: 1.25rem; font-weight: 800; color: var(--primary);
+    }
+    .logo-icon {
+      width: 32px; height: 32px; background: var(--accent); border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 18px; height: 18px; }
+
+    .nav-desktop { display: none; }
+    @media (min-width: 768px) {
+      .nav-desktop { display: flex; align-items: center; gap: 2rem; }
+    }
+    .nav-link {
+      font-size: 0.875rem; font-weight: 500; color: var(--text-muted);
+      transition: color var(--transition); position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: var(--accent); border-radius: 1px; transition: width var(--transition);
+    }
+    .nav-link:hover { color: var(--text); }
+    .nav-link:hover::after { width: 100%; }
+
+    .header-cta { display: none; }
+    @media (min-width: 768px) { .header-cta { display: flex; } }
+
+    .menu-toggle {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: var(--radius-sm);
+      color: var(--primary); transition: background var(--transition);
+    }
+    .menu-toggle:hover { background: var(--light); }
+    @media (min-width: 768px) { .menu-toggle { display: none; } }
+
+    /* ── Mobile Menu ── */
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 99; background: var(--white);
+      display: flex; flex-direction: column; padding: 5rem 1.5rem 2rem;
+      transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mobile-menu.open { transform: translateX(0); }
+    .mobile-menu .nav-link {
+      font-size: 1.125rem; font-weight: 600; color: var(--text);
+      padding: 1rem 0; border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu .nav-link::after { display: none; }
+    .mobile-menu .btn-primary { margin-top: 1.5rem; justify-content: center; }
+    .menu-close {
+      position: absolute; top: 0.75rem; right: 1.25rem;
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-sm); color: var(--primary);
+    }
+    .menu-close:hover { background: var(--light); }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative; padding: 8rem 0 5rem; overflow: hidden;
+      background: linear-gradient(165deg, var(--primary) 0%, #0F3562 50%, #143D6E 100%);
+    }
+    @media (min-width: 768px) { .hero { padding: 10rem 0 7rem; } }
+
+    .hero-grid {
+      display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center;
+    }
+    @media (min-width: 1024px) { .hero-grid { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+
+    .hero-content { max-width: 560px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.375rem 0.875rem; font-size: 0.8125rem; font-weight: 600;
+      background: rgb(37 99 235 / 0.15); color: #93BBFC;
+      border: 1px solid rgb(37 99 235 / 0.25); border-radius: 999px; margin-bottom: 1.5rem;
+    }
+    .hero-badge svg { width: 14px; height: 14px; }
+    .hero h1 { color: var(--white); margin-bottom: 1.25rem; }
+    .hero h1 span { color: #60A5FA; }
+    .hero-sub { font-size: clamp(1rem, 2vw, 1.125rem); color: #94A3B8; margin-bottom: 2rem; line-height: 1.7; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.875rem; }
+
+    /* Abstract Visual — CSS-only */
+    .hero-visual {
+      position: relative; width: 100%; aspect-ratio: 4/3; max-height: 420px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .flow-nodes {
+      position: relative; width: 100%; height: 100%;
+      display: grid; place-items: center;
+    }
+    .flow-node {
+      position: absolute; width: 64px; height: 64px; border-radius: var(--radius);
+      background: linear-gradient(135deg, rgb(37 99 235 / 0.25), rgb(37 99 235 / 0.1));
+      border: 1.5px solid rgb(96 165 250 / 0.4); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      animation: float 6s ease-in-out infinite;
+    }
+    .flow-node svg { width: 28px; height: 28px; color: #93BBFC; }
+    .flow-node:nth-child(1) { top: 10%; left: 15%; animation-delay: 0s; }
+    .flow-node:nth-child(2) { top: 20%; right: 20%; animation-delay: -1.5s; width: 48px; height: 48px; }
+    .flow-node:nth-child(3) { bottom: 25%; left: 25%; animation-delay: -3s; width: 56px; height: 56px; }
+    .flow-node:nth-child(4) { bottom: 15%; right: 15%; animation-delay: -4.5s; width: 44px; height: 44px; }
+    .flow-node:nth-child(5) { top: 50%; left: 50%; transform: translate(-50%, -50%); animation: none;
+      width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      border-color: rgb(147 187 252 / 0.6); box-shadow: 0 0 40px rgb(37 99 235 / 0.4);
+    }
+    .flow-node:nth-child(5) svg { width: 36px; height: 36px; color: var(--white); }
+
+    .flow-line {
+      position: absolute; background: linear-gradient(90deg, rgb(96 165 250 / 0.2), rgb(96 165 250 / 0.5), rgb(96 165 250 / 0.2));
+      height: 2px; border-radius: 1px; animation: pulse-line 3s ease-in-out infinite;
+    }
+    .flow-line::after {
+      content: ''; position: absolute; width: 8px; height: 8px; background: #60A5FA;
+      border-radius: 50%; top: 50%; transform: translateY(-50%); animation: flow-dot 2s linear infinite;
+    }
+    .flow-line:nth-of-type(6) { width: 120px; top: 28%; left: 22%; transform: rotate(25deg); }
+    .flow-line:nth-of-type(7) { width: 100px; top: 45%; right: 25%; transform: rotate(-20deg); }
+    .flow-line:nth-of-type(8) { width: 140px; bottom: 35%; left: 30%; transform: rotate(15deg); }
+    .flow-line:nth-of-type(9) { width: 110px; bottom: 30%; right: 28%; transform: rotate(-35deg); }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes pulse-line {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+    @keyframes flow-dot {
+      0% { left: 0; opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { left: calc(100% - 8px); opacity: 0; }
+    }
+
+    .hero-bg-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+    }
+    .hero-bg-orb-1 { width: 400px; height: 400px; background: rgb(37 99 235 / 0.15); top: -10%; right: -5%; }
+    .hero-bg-orb-2 { width: 300px; height: 300px; background: rgb(96 165 250 / 0.1); bottom: -10%; left: -5%; }
+
+    /* ── Problem Section ── */
+    .problem { background: var(--light); }
+    .section-header { text-align: center; max-width: 640px; margin: 0 auto 3.5rem; }
+    .section-header h2 { color: var(--primary); margin-bottom: 1rem; }
+    .section-header p { font-size: 1.0625rem; }
+
+    .cards-3 {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem;
+    }
+    @media (min-width: 768px) { .cards-3 { grid-template-columns: repeat(3, 1fr); } }
+
+    .pain-card {
+      background: var(--white); padding: 2rem; border-radius: var(--radius-lg);
+      border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+      transition: all var(--transition);
+    }
+    .pain-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent-light); }
+    .pain-icon {
+      width: 48px; height: 48px; border-radius: var(--radius);
+      background: var(--light); display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem; color: var(--accent);
+    }
+    .pain-icon svg { width: 24px; height: 24px; }
+    .pain-card h3 { color: var(--primary); margin-bottom: 0.625rem; }
+    .pain-card p { font-size: 0.9375rem; line-height: 1.6; }
+
+    /* ── Solution Section ── */
+    .solution { background: var(--white); }
+    .feature-card {
+      background: var(--light); padding: 2rem; border-radius: var(--radius-lg);
+      border: 1px solid var(--border); transition: all var(--transition);
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent), #60A5FA); opacity: 0; transition: opacity var(--transition);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .feature-icon {
+      width: 52px; height: 52px; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent), #3B82F6);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.25rem; color: var(--white);
+    }
+    .feature-icon svg { width: 26px; height: 26px; }
+    .feature-card h3 { color: var(--primary); margin-bottom: 0.625rem; }
+    .feature-card p { font-size: 0.9375rem; line-height: 1.6; }
+
+    /* ── How it Works ── */
+    .how-it-works { background: var(--primary); position: relative; overflow: hidden; }
+    .how-it-works h2, .how-it-works .section-header p { color: var(--white); }
+    .how-it-works .section-header p { opacity: 0.7; }
+    .steps {
+      display: grid; grid-template-columns: 1fr; gap: 2rem; position: relative; z-index: 1;
+    }
+    @media (min-width: 768px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+
+    .step {
+      text-align: center; padding: 2.5rem 1.5rem; border-radius: var(--radius-lg);
+      background: rgb(255 255 255 / 0.04); border: 1px solid rgb(255 255 255 / 0.08);
+      backdrop-filter: blur(8px); transition: all var(--transition);
+    }
+    .step:hover { background: rgb(255 255 255 / 0.08); border-color: rgb(255 255 255 / 0.15); transform: translateY(-4px); }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #3B82F6);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem; font-size: 1.25rem; font-weight: 800; color: var(--white);
+      box-shadow: 0 4px 15px rgb(37 99 235 / 0.4);
+    }
+    .step h3 { color: var(--white); margin-bottom: 0.625rem; }
+    .step p { color: #94A3B8; font-size: 0.9375rem; line-height: 1.6; }
+
+    .how-bg-orb {
+      position: absolute; border-radius: 50%; filter: blur(100px); pointer-events: none;
+    }
+    .how-bg-orb-1 { width: 500px; height: 500px; background: rgb(37 99 235 / 0.1); top: -20%; left: -10%; }
+    .how-bg-orb-2 { width: 400px; height: 400px; background: rgb(96 165 250 / 0.08); bottom: -20%; right: -10%; }
+
+    /* ── Pricing ── */
+    .pricing { background: var(--light); }
+    .pricing-cards {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem; align-items: start;
+    }
+    @media (min-width: 768px) { .pricing-cards { grid-template-columns: repeat(3, 1fr); } }
+
+    .pricing-card {
+      background: var(--white); padding: 2rem; border-radius: var(--radius-lg);
+      border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+      transition: all var(--transition); position: relative;
+    }
+    .pricing-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .pricing-card.featured {
+      border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow-lg);
+    }
+    @media (min-width: 768px) { .pricing-card.featured { transform: scale(1.05); } }
+    .pricing-card.featured:hover { transform: scale(1.05) translateY(-4px); }
+
+    .pricing-badge {
+      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      padding: 0.25rem 1rem; font-size: 0.75rem; font-weight: 700;
+      background: var(--accent); color: var(--white); border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .pricing-name { font-size: 1.125rem; font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
+    .pricing-desc { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+    .pricing-price { display: flex; align-items: baseline; gap: 0.25rem; margin-bottom: 1.5rem; }
+    .pricing-price .amount { font-size: 2.5rem; font-weight: 800; color: var(--primary); line-height: 1; }
+    .pricing-price .period { font-size: 0.875rem; color: var(--text-muted); }
+    .pricing-features { margin-bottom: 1.5rem; }
+    .pricing-features li {
+      display: flex; align-items: flex-start; gap: 0.625rem;
+      padding: 0.5rem 0; font-size: 0.9375rem; color: var(--text); border-bottom: 1px solid var(--border);
+    }
+    .pricing-features li:last-child { border-bottom: none; }
+    .pricing-features svg {
+      width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; margin-top: 2px;
+    }
+    .pricing-card .btn { width: 100%; }
+
+    /* ── FAQ ── */
+    .faq { background: var(--white); }
+    .faq-list { max-width: 800px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-question {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 1.5rem 0; text-align: left;
+      font-size: 1.0625rem; font-weight: 600; color: var(--primary);
+      transition: color var(--transition);
+    }
+    .faq-question:hover { color: var(--accent); }
+    .faq-question svg {
+      width: 20px; height: 20px; color: var(--text-muted);
+      transition: transform var(--transition); flex-shrink: 0; margin-left: 1rem;
+    }
+    .faq-item.open .faq-question svg { transform: rotate(180deg); color: var(--accent); }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .faq-item.open .faq-answer {
+      max-height: 300px; padding-bottom: 1.5rem;
+    }
+    .faq-answer p { font-size: 0.9375rem; line-height: 1.7; color: var(--text-muted); }
+
+    /* ── Final CTA ── */
+    .final-cta {
+      background: linear-gradient(135deg, var(--accent), #1D4ED8);
+      position: relative; overflow: hidden;
+    }
+    .final-cta-inner {
+      text-align: center; max-width: 600px; margin: 0 auto; position: relative; z-index: 1;
+    }
+    .final-cta h2 { color: var(--white); margin-bottom: 1rem; }
+    .final-cta p { color: rgb(255 255 255 / 0.85); font-size: 1.0625rem; margin-bottom: 2rem; }
+    .final-cta .btn-secondary {
+      background: var(--white); color: var(--accent); border: none;
+      box-shadow: var(--shadow-lg); font-size: 1rem; padding: 1rem 2.5rem;
+    }
+    .final-cta .btn-secondary:hover { background: var(--light); color: var(--accent-hover); }
+
+    .cta-bg-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+    }
+    .cta-bg-orb-1 { width: 300px; height: 300px; background: rgb(96 165 250 / 0.3); top: -50%; left: -10%; }
+    .cta-bg-orb-2 { width: 250px; height: 250px; background: rgb(59 130 246 / 0.2); bottom: -40%; right: -5%; }
+
+    /* ── Footer ── */
+    .footer { background: var(--primary); padding: 3rem 0 2rem; }
+    .footer-grid {
+      display: grid; grid-template-columns: 1fr; gap: 2.5rem; margin-bottom: 2.5rem;
+    }
+    @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
+    .footer-brand .logo { color: var(--white); margin-bottom: 0.75rem; }
+    .footer-brand p { color: #94A3B8; font-size: 0.875rem; line-height: 1.6; }
+    .footer-col h4 { color: var(--white); font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .footer-col a { display: block; color: #94A3B8; font-size: 0.875rem; padding: 0.375rem 0; transition: color var(--transition); }
+    .footer-col a:hover { color: #CBD5E1; }
+    .footer-bottom {
+      border-top: 1px solid rgb(255 255 255 / 0.08); padding-top: 1.5rem;
+      display: flex; flex-direction: column; gap: 0.75rem; align-items: center;
+    }
+    @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; } }
+    .footer-bottom p { color: #64748B; font-size: 0.8125rem; }
+    .footer-bottom a { color: #94A3B8; font-size: 0.8125rem; transition: color var(--transition); }
+    .footer-bottom a:hover { color: #CBD5E1; }
+
+    /* ── Focus & Reduced Motion ── */
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--radius-sm); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="#" class="logo" aria-label="FlowKit Startseite">
+        <span class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </span>
+        FlowKit
+      </a>
+      <nav class="nav-desktop" aria-label="Hauptnavigation">
+        <a href="#problem" class="nav-link">Problem</a>
+        <a href="#loesung" class="nav-link">Lösung</a>
+        <a href="#funktionsweise" class="nav-link">Funktionsweise</a>
+        <a href="#preise" class="nav-link">Preise</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+      </nav>
+      <div class="header-cta">
+        <a href="#final-cta" class="btn btn-primary">Jetzt starten</a>
+      </div>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Mobile Menu ── -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <button class="menu-close" id="menuClose" aria-label="Menü schließen">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a href="#problem" class="nav-link">Problem</a>
+    <a href="#loesung" class="nav-link">Lösung</a>
+    <a href="#funktionsweise" class="nav-link">Funktionsweise</a>
+    <a href="#preise" class="nav-link">Preise</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="#final-cta" class="btn btn-primary">Jetzt starten</a>
+  </div>
+
+  <main>
+    <!-- ── Hero ── -->
+    <section class="hero" id="hero">
+      <div class="hero-bg-orb hero-bg-orb-1" aria-hidden="true"></div>
+      <div class="hero-bg-orb hero-bg-orb-2" aria-hidden="true"></div>
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-content fade-in">
+            <div class="hero-badge" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Workflow Automation für das DACH-Gebiet
+            </div>
+            <h1>Automatisiere deine <span>Workflows</span> — ohne eine Zeile Code</h1>
+            <p class="hero-sub">FlowKit verbindet deine Tools, automatisiert repetitive Aufgaben und gibt dir Zeit für das, was wirklich zählt. Speziell entwickelt für Solopreneure und kleine Teams.</p>
+            <div class="hero-actions">
+              <a href="#final-cta" class="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                Kostenlos starten
+              </a>
+              <a href="#funktionsweise" class="btn btn-ghost">So funktioniert's</a>
+            </div>
+          </div>
+          <div class="hero-visual fade-in delay-2" aria-hidden="true">
+            <div class="flow-nodes">
+              <div class="flow-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
+              <div class="flow-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+              <div class="flow-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+              <div class="flow-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+              <div class="flow-node"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+              <div class="flow-line"></div>
+              <div class="flow-line"></div>
+              <div class="flow-line"></div>
+              <div class="flow-line"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Problem ── -->
+    <section class="section problem" id="problem">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Kennst du diese Probleme?</h2>
+          <p>Jeden Tag verlieren Solopreneure und kleine Teams wertvolle Zeit durch ineffiziente Prozesse — Zeit, die sie besser in ihr Kerngeschäft investieren.</p>
+        </div>
+        <div class="cards-3">
+          <article class="pain-card fade-in delay-1">
+            <div class="pain-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3>Zeitfressende Routine</h3>
+            <p>Stundenloses Kopieren von Daten zwischen Tools, manuelles Verschicken von E-Mails und das ewige Prüfen von Listen — Arbeit, die niemand sehen wird.</p>
+          </article>
+          <article class="pain-card fade-in delay-2">
+            <div class="pain-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h3>Fehler durch manuelle Arbeit</h3>
+            <p>Ein vergessener Kunde, eine falsch kopierte Adresse, ein E-Mail, das nie rausging — menschliche Fehler kosten Geld und Vertrauen.</p>
+          </article>
+          <article class="pain-card fade-in delay-3">
+            <div class="pain-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3>Skalierung unmöglich</h3>
+            <p>Mehr Kunden bedeuten mehr Arbeit — linear. Ohne Automatisierung wächst du nicht, du arbeitest nur mehr. Das ist kein Business, das ist ein Job.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Solution ── -->
+    <section class="section solution" id="loesung">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Unsere Lösung: Das RECIPE-Prinzip</h2>
+          <p>FlowKit strukturiert deine Automatisierung nach einem bewährten Rezept — von der ersten Idee bis zur laufenden Optimierung.</p>
+        </div>
+        <div class="cards-3">
+          <article class="feature-card fade-in delay-1">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <h3>Record — Aufzeichnen</h3>
+            <p>Documentiere deinen aktuellen Workflow mit einem einfachen Fragebogen. FlowKit analysiert automatisch, wo die größten Zeitfresser sitzen.</p>
+          </article>
+          <article class="feature-card fade-in delay-2">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <h3>Evaluate — Bewerten</h3>
+            <p>Priorisiere deine Workflows nach Impact und Aufwand. FlowKit zeigt dir, welche Automatisierung den größten ROI bringt — datenbasiert, nicht nach Bauchgefühl.</p>
+          </article>
+          <article class="feature-card fade-in delay-3">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+            </div>
+            <h3>Create — Erstellen</h3>
+            <p>Baue deine Automatisierung mit visuellen Bausteinen. Kein Code nötig — verbinde Trigger, Aktionen und Bedingungen per Drag & Drop.</p>
+          </article>
+        </div>
+        <div class="cards-3" style="margin-top: 1.5rem;">
+          <article class="feature-card fade-in delay-1">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="14 2 18 6 7 17 3 17 3 13 14 2"/><line x1="3" y1="22" x2="21" y2="22"/></svg>
+            </div>
+            <h3>Implement — Umsetzen</h3>
+            <p>Teste deinen Flow in einer Sandbox-Umgebung. FlowKit simuliert echte Daten und zeigt dir vor dem Live-Gang, ob alles reibungslos läuft.</p>
+          </article>
+          <article class="feature-card fade-in delay-2">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3>Perfect — Optimieren</h3>
+            <p>Analysiere die Performance deiner Workflows. Erkenne Bottlenecks, reduziere Fehlerraten und steigere die Effizienz kontinuierlich.</p>
+          </article>
+          <article class="feature-card fade-in delay-3">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <h3>Extend — Erweitern</h3>
+            <p>Verbinde FlowKit mit über 200 Tools — von CRM über E-Mail bis zu Buchhaltung. Neue Integrationen lassen sich in Sekunden hinzufügen.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── How it Works ── -->
+    <section class="section how-it-works" id="funktionsweise">
+      <div class="how-bg-orb how-bg-orb-1" aria-hidden="true"></div>
+      <div class="how-bg-orb how-bg-orb-2" aria-hidden="true"></div>
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>So funktioniert FlowKit</h2>
+          <p>In drei Schritten von manuellem Chaos zu automatisierten Workflows. Kein Entwickler nötig, keine komplexe Einrichtung.</p>
+        </div>
+        <div class="steps">
+          <article class="step fade-in delay-1">
+            <div class="step-num">1</div>
+            <h3>Workflow aufzeichnen</h3>
+            <p>Beschreibe deinen aktuellen Prozess in einfachen Worten. FlowKit erkennt automatisch die wiederkehrenden Schritte und die Tools, die du nutzt.</p>
+          </article>
+          <article class="step fade-in delay-2">
+            <div class="step-num">2</div>
+            <h3>Automatisierung bauen</h3>
+            <p>Wähle aus vorgefertigten Bausteinen oder erstelle eigene Logik. Verbinde Trigger und Aktionen visuell — wie ein Baukasten für Erwachsene.</p>
+          </article>
+          <article class="step fade-in delay-3">
+            <div class="step-num">3</div>
+            <h3>Live gehen & skalieren</h3>
+            <p>Aktiviere deinen Flow mit einem Klick. FlowKit überwacht, optimiert und alarmiert dich — damit du dich auf Wachstum konzentrieren kannst.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Pricing ── -->
+    <section class="section pricing" id="preise">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Transparente Preise</h2>
+          <p>Keine versteckten Kosten, keine verpflichtende Mindestlaufzeit. Starte kostenlos und wachse mit deinen Anforderungen.</p>
+        </div>
+        <div class="pricing-cards">
+          <article class="pricing-card fade-in delay-1">
+            <div class="pricing-name">Starter</div>
+            <div class="pricing-desc">Für Solopreneure, die den Einstieg testen wollen</div>
+            <div class="pricing-price">
+              <span class="amount">€0</span>
+              <span class="period">/ Monat</span>
+            </div>
+            <ul class="pricing-features">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>3 aktive Workflows</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>500 Ausführungen / Monat</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>5 Integrationen</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>E-Mail-Support</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Community-Zugang</li>
+            </ul>
+            <a href="#final-cta" class="btn btn-secondary">Kostenlos starten</a>
+          </article>
+
+          <article class="pricing-card featured fade-in delay-2">
+            <div class="pricing-badge">Beliebt</div>
+            <div class="pricing-name">Professional</div>
+            <div class="pricing-desc">Für wachsende Teams mit echten Automatisierungsbedarf</div>
+            <div class="pricing-price">
+              <span class="amount">€29</span>
+              <span class="period">/ Monat</span>
+            </div>
+            <ul class="pricing-features">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unbegrenzte Workflows</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>10.000 Ausführungen / Monat</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>50+ Integrationen</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Prioritäts-Support</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Erweiterte Analytics</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Team-Kollaboration (3 User)</li>
+            </ul>
+            <a href="#final-cta" class="btn btn-primary">Jetzt upgraden</a>
+          </article>
+
+          <article class="pricing-card fade-in delay-3">
+            <div class="pricing-name">Enterprise</div>
+            <div class="pricing-desc">Für Teams, die volle Kontrolle und maßgeschneiderte Lösungen brauchen</div>
+            <div class="pricing-price">
+              <span class="amount">€99</span>
+              <span class="period">/ Monat</span>
+            </div>
+            <ul class="pricing-features">
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Alles aus Professional</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unbegrenzte Ausführungen</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>200+ Integrationen</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Dedizierter Account Manager</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>SSO & erweiterte Sicherheit</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Benutzerdefinierte Integrationen</li>
+            </ul>
+            <a href="#final-cta" class="btn btn-secondary">Kontakt aufnehmen</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+    <section class="section faq" id="faq">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2>Häufig gestellte Fragen</h2>
+          <p>Antworten auf die wichtigsten Fragen — kurz, klar, ohne Fachchinesisch.</p>
+        </div>
+        <div class="faq-list fade-in delay-1">
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              Was unterscheidet FlowKit von Zapier oder Make?
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer"><p>FlowKit ist speziell für den DACH-Markt und Solopreneure entwickelt. Wir fokussieren uns auf Einfachheit, Datenschutz-Compliance (DSGVO) und deutschsprachigen Support. Kein überladenes Interface, keine unnötige Komplexität — nur das, was du wirklich brauchst.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              Brauche ich Programmierkenntnisse?
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer"><p>Absolut nicht. FlowKit ist 100 % No-Code. Du baust Workflows mit visuellen Bausteinen — per Drag & Drop. Wenn du einen Prozess in Worten beschreiben kannst, kannst du ihn in FlowKit automatisieren.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              Ist meine Daten sicher?
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer"><p>Ja. Alle Daten werden in Deutschland und der EU verarbeitet. FlowKit ist DSGVO-konform, verschlüsselt sensible Daten und bietet dir volle Kontrolle über deine Informationen. Kein Data-Mining, keine Weitergabe an Dritte.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              Kann ich jederzeit kündigen?
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer"><p>Ja — jederzeit und ohne Fragen. Keine Mindestlaufzeit, keine Kündigungsfristen. Du behältst auch nach der Kündigung Zugriff auf alle deine Workflows im Export-Format.</p></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+              Welche Tools kann ich verbinden?
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-answer"><p>FlowKit verbindet sich mit über 200 beliebten Tools — darunter Notion, Slack, Gmail, Google Sheets, Airtable, HubSpot, Shopify, Stripe und viele mehr. Neue Integrationen kommen monatlich hinzu. Fehlt etwas? Sag Bescheid, wir bauen es.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Final CTA ── -->
+    <section class="section final-cta" id="final-cta">
+      <div class="cta-bg-orb cta-bg-orb-1" aria-hidden="true"></div>
+      <div class="cta-bg-orb cta-bg-orb-2" aria-hidden="true"></div>
+      <div class="container">
+        <div class="final-cta-inner fade-in">
+          <h2>Bereit, deine Zeit zurückzugewinnen?</h2>
+          <p>Starte noch heute kostenlos. Keine Kreditkarte nötig, kein Verpflichtungszwang — nur reine Produktivität.</p>
+          <a href="#" class="btn btn-secondary" onclick="event.preventDefault(); alert('FlowKit kommt bald! Trage dich auf die Warteliste ein.');">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Jetzt kostenlos starten
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo" aria-label="FlowKit Startseite">
+            <span class="logo-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </span>
+            FlowKit
+          </a>
+          <p>Workflow Automation für Solopreneure und kleine Teams im DACH-Raum. Einfach. Sicher. Skalierbar.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Produkt</h4>
+          <a href="#loesung">Funktionen</a>
+          <a href="#preise">Preise</a>
+          <a href="#funktionsweise">Funktionsweise</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <h4>Unternehmen</h4>
+          <a href="#">Über uns</a>
+          <a href="#">Karriere</a>
+          <a href="#">Kontakt</a>
+          <a href="#">Blog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Rechtliches</h4>
+          <a href="#">Datenschutz</a>
+          <a href="#">Impressum</a>
+          <a href="#">AGB</a>
+          <a href="#">Cookie-Richtlinie</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 FlowKit — Eine Marke der KI-Holding</p>
+        <div style="display:flex;gap:1.5rem;">
+          <a href="#" aria-label="Twitter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="#" aria-label="GitHub"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Header Scroll Shadow ──
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    // ── Mobile Menu ──
+    const menuToggle = document.getElementById('menuToggle');
+    const menuClose = document.getElementById('menuClose');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileLinks = mobileMenu.querySelectorAll('.nav-link, .btn');
+
+    function openMenu() {
+      mobileMenu.classList.add('open');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    menuToggle.addEventListener('click', openMenu);
+    menuClose.addEventListener('click', closeMenu);
+    mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+    // ── Fade-in on Scroll (Intersection Observer) ──
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+    // ── FAQ Accordion ──
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        });
+        // Open clicked if wasn't open
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

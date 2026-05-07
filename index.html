@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowKit — Workflow Automation für Solopreneure & KMU</title>
+    <meta name="description" content="Automatisiere Rechnungen, Onboarding & Content. Fertige n8n-Workflows. Ab 0€. Für Solopreneure & KMU in DACH.">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg: #ffffff;
+            --bg-alt: #f8fafc;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); line-height: 1.6; background: var(--bg); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: var(--radius); font-weight: 600; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; font-size: 16px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: white; }
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--bg-alt); border-radius: 20px; font-size: 14px; font-weight: 500; color: var(--text-light); }
+        .badge svg { width: 16px; height: 16px; }
+
+        /* Header */
+        header { position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 100; }
+        nav { display: flex; justify-content: space-between; align-items: center; height: 72px; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--secondary); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo-icon { width: 32px; height: 32px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--primary); }
+        .legal-nav { display: none; }
+
+        /* Hero */
+        .hero { padding: 100px 0 80px; background: linear-gradient(135deg, var(--bg) 0%, var(--bg-alt) 100%); }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .hero h1 { font-size: 56px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 24px; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { font-size: 20px; color: var(--text-light); margin-bottom: 32px; max-width: 480px; }
+        .hero-ctas { display: flex; gap: 16px; margin-bottom: 40px; }
+        .hero-stats { display: flex; gap: 32px; }
+        .stat { display: flex; flex-direction: column; }
+        .stat-value { font-size: 32px; font-weight: 800; color: var(--primary); }
+        .stat-label { font-size: 14px; color: var(--text-light); }
+        .hero-visual { background: var(--secondary); border-radius: var(--radius); padding: 32px; color: white; position: relative; overflow: hidden; }
+        .hero-visual::before { content: ''; position: absolute; top: -50%; right: -50%; width: 100%; height: 100%; background: radial-gradient(circle, var(--primary) 0%, transparent 70%); opacity: 0.3; }
+        .code-block { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; font-family: 'SF Mono', Monaco, monospace; font-size: 13px; position: relative; }
+        .code-line { display: flex; gap: 12px; margin-bottom: 8px; }
+        .code-prompt { color: var(--accent); }
+        .code-cmd { color: #e2e8f0; }
+        .code-output { color: var(--text-light); margin-left: 24px; }
+
+        /* Problem/Solution */
+        .problem { padding: 80px 0; }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 60px; }
+        .section-header h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; }
+        .section-header p { font-size: 18px; color: var(--text-light); }
+        .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .problem-card { padding: 32px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); }
+        .problem-card .icon { width: 48px; height: 48px; background: #fef3c7; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 24px; }
+        .problem-card:nth-child(2) .icon { background: #fee2e2; }
+        .problem-card:nth-child(3) .icon { background: #dbeafe; }
+        .problem-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .problem-card p { color: var(--text-light); font-size: 15px; }
+
+        /* Recipes */
+        .recipes { padding: 80px 0; background: var(--bg-alt); }
+        .recipes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .recipe-card { background: var(--bg); border-radius: var(--radius); padding: 32px; border: 1px solid var(--border); transition: all 0.2s; position: relative; }
+        .recipe-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .recipe-badge { position: absolute; top: 16px; right: 16px; padding: 4px 12px; background: var(--primary); color: white; font-size: 12px; font-weight: 700; border-radius: 6px; text-transform: uppercase; }
+        .recipe-icon { width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-bottom: 20px; }
+        .recipe-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+        .recipe-card p { color: var(--text-light); margin-bottom: 20px; font-size: 15px; }
+        .recipe-features { list-style: none; }
+        .recipe-features li { display: flex; align-items: center; gap: 8px; padding: 8px 0; font-size: 14px; color: var(--text); }
+        .recipe-features li::before { content: '✓'; color: var(--success); font-weight: 700; }
+
+        /* Legal Sections */
+        .legal-section { padding: 60px 0; background: var(--bg-alt); border-top: 1px solid var(--border); }
+        .legal-section:nth-child(even) { background: var(--bg); }
+        .legal-section h2 { font-size: 32px; font-weight: 800; margin-bottom: 32px; }
+        .legal-content h3 { font-size: 18px; font-weight: 700; margin: 24px 0 12px; color: var(--secondary); }
+        .legal-content p { color: var(--text-light); font-size: 14px; line-height: 1.8; margin-bottom: 12px; }
+
+        /* Footer */
+        footer { background: var(--secondary); color: white; padding: 60px 0 30px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .footer-brand .logo { color: white; }
+        .footer-brand p { color: #94a3b8; }
+        .footer-links h4 { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; color: #94a3b8; }
+        .footer-links a { display: block; color: #e2e8f0; text-decoration: none; margin-bottom: 8px; font-size: 14px; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-links p { color: #94a3b8; font-size: 14px; margin-bottom: 4px; }
+        .footer-bottom { border-top: 1px solid #334155; padding-top: 20px; text-align: center; }
+        .footer-bottom p { color: #64748b; font-size: 13px; }
+
+        /* Pricing */
+        .pricing { padding: 80px 0; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 900px; margin: 0 auto; }
+        .pricing-card { padding: 40px 32px; border: 2px solid var(--border); border-radius: var(--radius); text-align: center; position: relative; }
+        .pricing-card.featured { border-color: var(--primary); transform: scale(1.05); }
+        .popular-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 6px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+        .pricing-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .pricing-card .price { font-size: 48px; font-weight: 800; color: var(--secondary); margin: 16px 0; }
+        .pricing-card .price span { font-size: 16px; color: var(--text-light); font-weight: 400; }
+        .pricing-features { list-style: none; text-align: left; margin: 24px 0; }
+        .pricing-features li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 15px; display: flex; align-items: center; gap: 8px; }
+        .pricing-features li::before { content: '✓'; color: var(--success); font-weight: 700; }
+        .pricing-features li.missing::before { content: '—'; color: var(--text-light); }
+        .pricing-features li.missing { color: var(--text-light); }
+
+        /* CTA */
+        .cta { padding: 80px 0; background: var(--secondary); color: white; text-align: center; }
+        .cta h2 { font-size: 40px; font-weight: 800; margin-bottom: 16px; }
+        .cta p { font-size: 18px; color: #94a3b8; margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+        /* Footer */
+        footer { padding: 40px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-light); font-size: 14px; }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 36px; }
+            .problem-grid, .recipes-grid, .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card.featured { transform: none; }
+            .nav-links { display: none; }
+            .hero-ctas { flex-direction: column; }
+            .hero-stats { flex-wrap: wrap; gap: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="container">
+        <a href="#" class="logo">
+            <div class="logo-icon">FK</div>
+            FlowKit
+        </a>
+        <ul class="nav-links">
+            <li><a href="#problem">Problem</a></li>
+            <li><a href="#rezepte">Rezepte</a></li>
+            <li><a href="#preise">Preise</a></li>
+            <li><a href="#impressum">Impressum</a></li>
+            <li><a href="#agb">AGB</a></li>
+        </ul>
+        <a href="#starten" class="btn btn-primary">Jetzt starten</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div>
+                <div class="badge" style="margin-bottom: 24px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    Ab 0€ — fertige Workflows
+                </div>
+                <h1>Automatisierung, <span>die funktioniert</span></h1>
+                <p>Keine 10.000€ Agentur. Keine 6-monatige Implementation. Fertige n8n-Workflows für Rechnung, Onboarding & Content — in 1 Tag einsatzbereit.</p>
+                <div class="hero-ctas">
+                    <a href="#rezepte" class="btn btn-primary">Workflows ansehen</a>
+                    <a href="#problem" class="btn btn-outline">Wie es funktioniert</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">20h</span>
+                        <span class="stat-label">Zeitersparnis /Woche</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">&lt;10€</span>
+                        <span class="stat-label">Kosten /Monat</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">1 Tag</span>
+                        <span class="stat-label">Zur Einrichtung</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-block">
+                    <div class="code-line"><span class="code-prompt">$</span> <span class="code-cmd">flowkit install rechnung-mahnwesen</span></div>
+                    <div class="code-line"><span class="code-prompt">→</span> <span class="code-output">RECIPE-001 geladen</span></div>
+                    <div class="code-line"><span class="code-prompt">→</span> <span class="code-output">n8n-Workflow: 8 Nodes</span></div>
+                    <div class="code-line"><span class="code-prompt">→</span> <span class="code-output">Konfiguration: SMTP + Sheet</span></div>
+                    <div class="code-line"><span class="code-prompt">→</span> <span class="code-output">Status: BEREIT</span></div>
+                    <div class="code-line" style="margin-top: 16px;"><span class="code-prompt">$</span> <span class="code-cmd">flowkit run --test</span></div>
+                    <div class="code-line"><span class="code-prompt">✓</span> <span class="code-output">Rechnung generiert</span></div>
+                    <div class="code-line"><span class="code-prompt">✓</span> <span class="code-output">Email versendet</span></div>
+                    <div class="code-line"><span class="code-prompt">✓</span> <span class="code-output">Mahnstufe 0 → OK</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="problem" id="problem">
+    <div class="container">
+        <div class="section-header">
+            <h2>Das tägliche Chaos</h2>
+            <p>Solopreneure verlieren 20+ Stunden pro Woche an manuelle Prozesse. Hier sind die drei größten Zeitfresser:</p>
+        </div>
+        <div class="problem-grid">
+            <div class="problem-card">
+                <div class="icon">📄</div>
+                <h3>Rechnungen & Mahnungen</h3>
+                <p>Rechnungen manuell schreiben, Zahlungen prüfen, Mahnungen tippen, wiederholen. 5h/Woche für etwas, das vollautomatisch geht.</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon">👋</div>
+                <h3>Kunden-Onboarding</h3>
+                <p>Jeder neue Kunde braucht Willkommensmails, Zugangsdaten, Checklisten, Erinnerungen. Ohne System vergisst man halb.</p>
+            </div>
+            <div class="problem-card">
+                <div class="icon">📢</div>
+                <h3>Content & Marketing</h3>
+                <p>LinkedIn-Posts, Blog-Artikel, Newsletter — jeden Tag neu überlegen, schreiben, formatieren. Konstanz? Fehlanzeige.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="recipes" id="rezepte">
+    <div class="container">
+        <div class="section-header">
+            <h2>Fertige Rezepte</h2>
+            <p>Kein Bauen von Null. Keine Programmierung. JSON importieren, Daten eingeben, laufen lassen.</p>
+        </div>
+        <div class="recipes-grid">
+            <div class="recipe-card">
+                <span class="recipe-badge">RECIPE-001</span>
+                <div class="recipe-icon">📄</div>
+                <h3>Rechnung + Mahnwesen</h3>
+                <p>Automatische Rechnungsgenerierung mit 3-stufigem Mahnwesen. Von Erinnerung bis Inkasso-Warnung.</p>
+                <ul class="recipe-features">
+                    <li>HTML-Rechnung mit Design</li>
+                    <li>3 Mahnstufen (Tag 1, 7, 14)</li>
+                    <li>Verzugszinsen ab Stufe 3</li>
+                    <li>Automatische Emails</li>
+                    <li>Status-Tracking</li>
+                </ul>
+            </div>
+            <div class="recipe-card">
+                <span class="recipe-badge">RECIPE-002</span>
+                <div class="recipe-icon">👋</div>
+                <h3>Kunden-Onboarding</h3>
+                <p>Vollautomatisiertes Onboarding mit paket-spezifischen Checklisten für Starter, Professional & Enterprise.</p>
+                <ul class="recipe-features">
+                    <li>3 Pakete, 3 Checklisten</li>
+                    <li>Willkommens-Email</li>
+                    <li>Team-Benachrichtigung</li>
+                    <li>Kalendereinträge</li>
+                    <li>14-Tage & 30-Tage Review</li>
+                </ul>
+            </div>
+            <div class="recipe-card">
+                <span class="recipe-badge">RECIPE-003</span>
+                <div class="recipe-icon">📢</div>
+                <h3>Content-Kalender</h3>
+                <p>Wöchentlich automatisch Content für LinkedIn, Blog, Twitter/X und Newsletter generieren und planen.</p>
+                <ul class="recipe-features">
+                    <li>5 Posts/Woche automatisch</li>
+                    <li>LinkedIn + Twitter + Blog</li>
+                    <li>Newsletter-Format</li>
+                    <li>Kalender-Integration</li>
+                    <li>Fertige Text-Vorlagen</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pricing" id="preise">
+    <div class="container">
+        <div class="section-header">
+            <h2>Preise</h2>
+            <p>Keine versteckten Kosten. Keine Abos für die Workflows selbst. Nur laufende Kosten für Hosting.</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Starter</h3>
+                <div class="price">0€ <span>/einmalig</span></div>
+                <p style="color: var(--text-light); margin-bottom: 20px;">Selbst-Hosting auf eigener Infrastruktur</p>
+                <ul class="pricing-features">
+                    <li>Alle 3 RECIPE-Workflows</li>
+                    <li>Vollständiger Quellcode</li>
+                    <li>JSON für n8n</li>
+                    <li>Dokumentation</li>
+                    <li class="missing">Support</li>
+                    <li class="missing">Updates</li>
+                </ul>
+                <a href="#" class="btn btn-outline" style="width: 100%; justify-content: center;">Herunterladen</a>
+            </div>
+            <div class="pricing-card featured">
+                <span class="popular-badge">Beliebt</span>
+                <h3>Professional</h3>
+                <div class="price">49€ <span>/einmalig</span></div>
+                <p style="color: var(--text-light); margin-bottom: 20px;">Mit Setup-Hilfe & 30 Tage Support</p>
+                <ul class="pricing-features">
+                    <li>Alle 3 RECIPE-Workflows</li>
+                    <li>Vollständiger Quellcode</li>
+                    <li>JSON für n8n</li>
+                    <li>Dokumentation</li>
+                    <li>Email-Support (30 Tage)</li>
+                    <li>Updates (6 Monate)</li>
+                </ul>
+                <a href="#" class="btn btn-primary" style="width: 100%; justify-content: center;">Jetzt kaufen</a>
+            </div>
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <div class="price">Auf Anfrage</div>
+                <p style="color: var(--text-light); margin-bottom: 20px;">Custom Workflows & Dedicated Support</p>
+                <ul class="pricing-features">
+                    <li>Alle Workflows + Custom</li>
+                    <li>Individuelle Anpassung</li>
+                    <li>Dedizierter Account Manager</li>
+                    <li>SLA mit Reaktionszeit</li>
+                    <li>Priorisierter Support</li>
+                    <li>Alle Updates inklusive</li>
+                </ul>
+                <a href="#" class="btn btn-outline" style="width: 100%; justify-content: center;">Kontaktieren</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta" id="starten">
+    <div class="container">
+        <h2>Stoppe das Chaos. Starte heute.</h2>
+        <p>20 Stunden pro Woche sind 1.000 Stunden pro Jahr. Was könntest du mit 1.000 Stunden mehr anfangen?</p>
+        <a href="#rezepte" class="btn btn-primary" style="font-size: 18px; padding: 16px 40px;">Workflows ansehen</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo" style="margin-bottom: 16px;">
+                    <div class="logo-icon">F</div>
+                    FlowKit
+                </div>
+                <p style="color: var(--text-light); font-size: 14px;">Workflow Automation für Solopreneure & KMU in DACH.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Rechtliches</h4>
+                <a href="#impressum">Impressum</a>
+                <a href="#agb">AGB</a>
+                <a href="#datenschutz">Datenschutz</a>
+            </div>
+            <div class="footer-links">
+                <h4>Kontakt</h4>
+                <p>73092 Heiningen, Deutschland</p>
+                <p>support@flowkit.de</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 FlowKit — Workflow Automation DACH. Alle Rechte vorbehalten.</p>
+        </div>
+    </div>
+</footer>
+
+<section class="legal-section" id="impressum">
+    <div class="container">
+        <h2>Impressum</h2>
+        <div class="legal-content">
+            <h3>Angaben gemäß § 5 TMG</h3>
+            <p><strong>FlowKit</strong><br>
+            Workflow Automation DACH<br>
+            Vertreten durch: Marcel Schweizer<br>
+            73092 Heiningen<br>
+            Deutschland</p>
+            
+            <h3>Kontakt</h3>
+            <p>E-Mail: support@flowkit.de</p>
+            
+            <h3>Haftung für Inhalte</h3>
+            <p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+            
+            <h3>Haftung für Links</h3>
+            <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen.</p>
+            
+            <h3>Streitschlichtung</h3>
+            <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/<br>
+            Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+        </div>
+    </div>
+</section>
+
+<section class="legal-section" id="agb">
+    <div class="container">
+        <h2>Allgemeine Geschäftsbedingungen (AGB)</h2>
+        <div class="legal-content">
+            <h3>§ 1 Geltungsbereich</h3>
+            <p>Diese Allgemeinen Geschäftsbedingungen gelten für alle Lieferungen und Leistungen von FlowKit, Workflow Automation DACH, 73092 Heiningen, Deutschland.</p>
+            
+            <h3>§ 2 Vertragsschluss</h3>
+            <p>Die Darstellung der Produkte im Online-Shop stellt kein rechtlich bindendes Angebot dar. Durch die Bestellung gibt der Kunde ein verbindliches Angebot ab. Der Vertrag kommt durch Annahme des Angebotes zustande.</p>
+            
+            <h3>§ 3 Preise und Zahlung</h3>
+            <p>Alle Preise verstehen sich in Euro (€) und enthalten die gesetzliche Umsatzsteuer. Die Zahlung erfolgt per PayPal, Kreditkarte oder Überweisung.</p>
+            
+            <h3>§ 4 Lieferung</h3>
+            <p>Bei digitalen Produkten erfolgt die Lieferung durch Download-Link per E-Mail unverzüglich nach Zahlungseingang.</p>
+            
+            <h3>§ 5 Widerrufsrecht</h3>
+            <p>Bei digitalen Inhalten, die nicht auf einem physischen Datenträger bereitgestellt werden, erlischt das Widerrufsrecht, wenn der Kunde vor Vertragsschluss seine Einwilligung zur sofortigen Ausführung erteilt und seine Kenntnis vom Erlöschen des Widerrufsrechts bestätigt.</p>
+            
+            <h3>§ 6 Gewährleistung</h3>
+            <p>Es gelten die gesetzlichen Gewährleistungsrechte. Die Gewährleistungsfrist beträgt 12 Monate ab Lieferung.</p>
+            
+            <h3>§ 7 Haftung</h3>
+            <p>Die Haftung für leicht fahrlässige Verletzung unwesentlicher Vertragspflichten ist ausgeschlossen. Die Haftung für grobe Fahrlässigkeit und Vorsatz bleibt unberührt.</p>
+            
+            <h3>§ 8 Schlussbestimmungen</h3>
+            <p>Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist Heiningen, sofern der Kunde Kaufmann ist.</p>
+            <p style="margin-top: 20px;"><strong>Stand:</strong> Mai 2026</p>
+        </div>
+    </div>
+</section>
+
+<section class="legal-section" id="datenschutz">
+    <div class="container">
+        <h2>Datenschutzerklärung</h2>
+        <div class="legal-content">
+            <h3>1. Verantwortlicher</h3>
+            <p>FlowKit, Workflow Automation DACH, 73092 Heiningen, Deutschland<br>E-Mail: support@flowkit.de</p>
+            
+            <h3>2. Datenverarbeitung</h3>
+            <p>Wir verarbeiten personenbezogene Daten nur, soweit dies zur Bereitstellung unserer Dienste erforderlich ist. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.</p>
+            
+            <h3>3. Ihre Rechte</h3>
+            <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerruf der Einwilligung.</p>
+            
+            <h3>4. Kontakt</h3>
+            <p>Bei Fragen zum Datenschutz: support@flowkit.de</p>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
